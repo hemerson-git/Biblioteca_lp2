@@ -1,0 +1,11 @@
+MAIN - Switch case 5: já esta salvando em um array list, falta salvar em arquivo de texto
+
+DAOLivro - Criei a classe DAOLivro Ja que o grupo discutiu sobre o assunto e descidimos que seria necessario
+
+APIarquivo - Foi excluida pois o padrão utilizado que é parecido com MVC não necessita dessa classe
+
+Controle - Implementação parcial das funções
+
+MAIN - Switch case 6: já esta salvando em um array list, falta salvar em arquivo de texto
+
+MAIN - Switch case 1: Falta converter a data linha 52, listar os leitores para escolha - linha 58, listar os livros - linha 60.
