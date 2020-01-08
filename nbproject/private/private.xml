@@ -3,7 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/giova/Dropbox/universidade/Bacharelado%20em%20Sistema%20da%20Informação/3º%20Semestre/Linguagem%20de%20Programação%202/Trabalho%202%20unidade%20Biblioteca/Biblioteca/.git/config</file>
+            <file>file:/home/hemerson/NetBeansProjects/Biblioteca_lp2/src/Biblioteca/Controle.java</file>
+            <file>file:/home/hemerson/NetBeansProjects/Biblioteca_lp2/src/Biblioteca/Emprestimo.java</file>
+            <file>file:/home/hemerson/NetBeansProjects/Biblioteca_lp2/src/Biblioteca/DAOEmprestimo.java</file>
         </group>
     </open-files>
 </project-private>
