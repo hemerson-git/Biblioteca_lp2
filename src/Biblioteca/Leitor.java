@@ -6,11 +6,13 @@ public class Leitor{
 
     private String nome;
     private int idLeitor;
+    private TipoLeitor tipoLeitor;
 
-    Leitor(int i, String nome) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Leitor(String nome, int idLeitor, TipoLeitor tipoLeitor) {
+        this.nome = nome;
+        this.idLeitor = idLeitor;
+        this.tipoLeitor = tipoLeitor;
     }
-
     
     public String getNome() {
         return nome;
@@ -28,5 +30,11 @@ public class Leitor{
         this.idLeitor = idLeitor;
     }
 
-    
+    public TipoLeitor getTipoLeitor() {
+        return tipoLeitor;
+    }
+
+    public void setTipoLeitor(TipoLeitor tipoLeitor) {
+        this.tipoLeitor = tipoLeitor;
+    }
 }

@@ -18,7 +18,6 @@ public class Main extends Controle {
     private static List<Leitor> listaLeitor = new ArrayList<Leitor>();
     private static List<Emprestimo> listaEmprestimo = new ArrayList<Emprestimo>();
 
-    private static int cont = 1;
 
     public static void main(String args[]) throws IOException {
         Scanner teclado = new Scanner(System.in);
@@ -44,30 +43,22 @@ public class Main extends Controle {
                 switch (selecao) {
                     case 0:
                         exit(1);
-                        biblioteca.cadastrarLivro("title", "Autor", 1, 12, 179856);
                     case 1:
                         //Cadastro de emprestimo
-                        for (int i = 1; cont != 0; i++) {
-                            System.out.print("Digite a data do " + i + "ºemprestimo: ");
-                            //String data = teclado.next().;
-                            System.out.print("Digite a data de devolução do emprestimo: ");
-                            String dataDevolucao = teclado.next();
-                            System.out.print("Digite a data prevista para devolução");
-                            String dataPrevisaoDevolucao = teclado.next();
-                            System.out.print("Digite o numero referente ao ID do leitor: ");
-                            int leitor = teclado.nextInt();
-                            System.out.print("Digite o numero referente ao ID do livro: ");
-                            int livro = teclado.nextInt();
+                        int continuar3 = 1;
+                        while (continuar3 == 1) {
+                            System.out.print("Digite o nome do leitor: ");
+                            String leitor = teclado.next();
+                            System.out.print("Digite o título do livro: ");
+                            String livro = teclado.next();
 
-                            //listaEmprestimo.add(new Emprestimo(i, data, dataDevolucao, dataPrevisaoDevolucao, leitor, livro));
+                            biblioteca.criarEmprestimo(leitor, livro);
+                            
                             System.out.println("Deseja fazer outro emprestimo? 1-SIM 2-NÃO");
                             int continuar = teclado.nextInt();
-                            if (continuar == 2) {
-                                cont = 0;
-                            }
                         }
-                        System.out.println(selecao);
                         break;
+                        
                     case 2:
                         System.out.println(selecao);
                         break;
@@ -79,42 +70,39 @@ public class Main extends Controle {
                         break;
                     case 5:
                         //Cadastro de livro
-                        for (int i = 1; cont != 0; i++) {
-                            System.out.print("Digite o titulo do " + i + "ºlivro: ");
+                        int continuar = 1;
+                        while (continuar == 1) {
+                            System.out.print("Digite o titulo do livro: ");
                             String titulo = teclado.next();
                             System.out.print("Digite o autor do livro " + titulo + ": ");
                             String autor = teclado.next();
-                            System.out.print("Digite o número do exemplar: ");
+                            System.out.print("Digite o número de exemplares: ");
                             int numeroExemplar = teclado.nextInt();
-                            System.out.print("Digite o código do livro: ");
-                            int codigo = teclado.nextInt();
                             System.out.print("Digite o status do livro: ");
                             int status = teclado.nextInt();
 
-                            listaLivro.add(new Livro(numeroExemplar, codigo, status, titulo, autor));
+                            biblioteca.cadastrarLivro(titulo, autor, status, numeroExemplar);
 
                             System.out.println("Deseja cadastrar novamente? 1-SIM 2-NÃO");
-                            int continuar = teclado.nextInt();
-                            if (continuar == 2) {
-                                cont = 0;
-                            }
+                            continuar = teclado.nextInt();
                         }
 
 //                        System.out.println(selecao);
                         break;
                     case 6:
 //                        //Cadastro do leitor
-                        for (int i = 1; cont != 0; i++) {
-                            System.out.print("Digite o nome do " + i + "ºleitor: ");
+                        int continuar2 = 1;
+                        while (continuar2 == 1) {
+                            System.out.print("Digite o nome do leitor: ");
                             String leitor = teclado.next();
 
-                            listaLeitor.add(new Leitor(i, leitor));
+                            System.out.print("Informe o tipo de Leitor 1-Estudante 2-Bolsista IC 3-Professor: ");
+                            int tipo = teclado.nextInt();
+
+                            biblioteca.cadastrarLeitor(leitor, tipo);
 
                             System.out.println("Deseja cadastrar novamente? 1-SIM 2-NÃO");
-                            int continuar = teclado.nextInt();
-                            if (continuar == 2) {
-                                cont = 0;
-                            }
+                            continuar2 = teclado.nextInt();
                         }
                         break;
                     case 7:

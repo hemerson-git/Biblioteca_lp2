@@ -8,6 +8,7 @@ package Biblioteca;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,8 +18,9 @@ import java.util.List;
 public class DAOEmprestimo extends Emprestimo{
     BufferedWriter saida;
 
-    public DAOEmprestimo(int id, int tipoLeitor, Leitor leitor, Livro livro) {
-        super(id, tipoLeitor, leitor, livro);
+    public DAOEmprestimo(BufferedWriter saida, int id, Date dataEmprestimo, Date dataDevolucao, Date dataPrevisaoDevolucao, Leitor leitor, Livro livro) {
+        super(id, dataEmprestimo, dataDevolucao, dataPrevisaoDevolucao, leitor, livro);
+        this.saida = saida;
     }
     
 public List<Emprestimo> obterTodos(){

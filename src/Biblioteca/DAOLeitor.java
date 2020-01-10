@@ -5,14 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-public class DAOLeitor extends Leitor{
+public class DAOLeitor {
 //dados de arquivo de leitores
 
     BufferedWriter saida;
-
-    public DAOLeitor(String nome, int i) {
-        super(i, nome);
-    }
 
     public List<Leitor> obterTodos() {
         List<Leitor> listaLeitor = null;
