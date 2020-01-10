@@ -1,15 +1,12 @@
 package Biblioteca;
 
 //Andersdon Leite
-//Emerson
+//Hemerson
 //Giovane Fernandes
 //Uallace Oliveira
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
+import static java.lang.System.exit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -45,6 +42,8 @@ public class Main extends Controle {
                 selecao = teclado.nextInt();
 
                 switch (selecao) {
+                    case 0:
+                        exit(1);
                     case 1:
                         //Cadastro de emprestimo
                         for (int i = 1; cont != 0; i++) {
@@ -60,7 +59,6 @@ public class Main extends Controle {
                             int livro = teclado.nextInt();
 
                             //listaEmprestimo.add(new Emprestimo(i, data, dataDevolucao, dataPrevisaoDevolucao, leitor, livro));
-
                             System.out.println("Deseja fazer outro emprestimo? 1-SIM 2-NÃO");
                             int continuar = teclado.nextInt();
                             if (continuar == 2) {
