@@ -18,7 +18,6 @@ public class Main extends Controle {
     private static List<Leitor> listaLeitor = new ArrayList<Leitor>();
     private static List<Emprestimo> listaEmprestimo = new ArrayList<Emprestimo>();
 
-
     public static void main(String args[]) throws IOException {
         Scanner teclado = new Scanner(System.in);
 
@@ -53,20 +52,23 @@ public class Main extends Controle {
                             String livro = teclado.next();
 
                             biblioteca.criarEmprestimo(leitor, livro);
-                            
+
                             System.out.println("Deseja fazer outro emprestimo? 1-SIM 2-NÃO");
                             int continuar = teclado.nextInt();
                         }
                         break;
-                        
+
                     case 2:
                         System.out.println(selecao);
                         break;
                     case 3:
-                        System.out.println(selecao);
+                        //imprime um empréstimo
+                        String nomeLeitor = teclado.next();
+                        biblioteca.imprimirEmprestimoNome(nomeLeitor);
                         break;
                     case 4:
-                        System.out.println(selecao);
+                        //imprime todos os empréstimos
+                        biblioteca.imprimirTodos();
                         break;
                     case 5:
                         //Cadastro de livro
@@ -105,16 +107,38 @@ public class Main extends Controle {
                             continuar2 = teclado.nextInt();
                         }
                         break;
+
                     case 7:
-                        System.out.println(selecao);
+                        //Excluir livro
+                        int continuarExcluirLivro = 1;
+                        while (continuarExcluirLivro == 1) {
+                            System.out.print("Informe o id do Livro a ser excluído: ");
+                            int idLivroExcluir = teclado.nextInt();
+                            biblioteca.excluirLivro(idLivroExcluir);
+
+                            System.out.print("Deseja excluir outro livro? 1-SIM 2-NÃO");
+                            continuarExcluirLivro = teclado.nextInt();
+                        }
                         break;
+
                     case 8:
-                        System.out.println(selecao);
+                        //excluir leitor
+                        int continuarExcluirLeitor = 1;
+                        while (continuarExcluirLeitor == 1) {
+                            System.out.print("Informe o id leitor a ser excluído: ");
+                            int idLeitorExcluir = teclado.nextInt();
+                            biblioteca.excluirLeitor(idLeitorExcluir);
+
+                            System.out.print("Deseja excluir outro livro? 1-SIM 2-NÃO");
+                            continuarExcluirLeitor = teclado.nextInt();
+                        }
                         break;
                     default:
                         JOptionPane.showMessageDialog(null, "A opção escolhida é invalida!", "ERRO", JOptionPane.ERROR_MESSAGE);
                         selecao = -1;
                 }
+
+                biblioteca.gravarTodos();
             } catch (InputMismatchException e) {
                 JOptionPane.showMessageDialog(null, "Digite um número inteiro e válido", "ERRO", JOptionPane.ERROR_MESSAGE);
                 selecao = -1;

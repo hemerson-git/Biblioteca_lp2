@@ -108,8 +108,9 @@ public class Emprestimo {
 
     public String toString() {
 //chamado quando solicitar a impressão de empréstimos. Mostrar todos os dados.
-        String x = null;
+        String x = "Impresso com sucesso";
         return x;
+        
     }
 
 }

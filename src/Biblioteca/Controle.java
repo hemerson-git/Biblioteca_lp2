@@ -136,6 +136,8 @@ public class Controle {
         for (Livro livro : livros) {
             if (livro.getCodigo() == idLivro) {
                 livro = null;
+                System.out.println("Livro excluído com sucesso!");
+                break;
             }
         }
     }
@@ -144,13 +146,15 @@ public class Controle {
         for (Leitor leitor : leitores) {
             if (leitor.getIdLeitor() == idLeitor) {
                 leitor = null;
+                System.out.println("Leitor excluído com sucesso!");
+                break;
             }
         }
     }
 
     public void gravarTodos() {
 //        daoLivro.gravarTodos(livros);
-        daoLeitor.gravarTodos(leitores);
+//        daoLeitor.gravarTodos(leitores);
         daoEmprestimo.gravarTodos(emprestimos);
     }
 
