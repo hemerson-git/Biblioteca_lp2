@@ -7,10 +7,7 @@ package Biblioteca;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.Buffer;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,15 +15,10 @@ import java.util.List;
  * @author giovane
  */
 public class DAOEmprestimo extends Emprestimo{
-    
-    DAOEmprestimo dao = new DAOEmprestimo();
     BufferedWriter saida;
 
-    public DAOEmprestimo(int id, Date dataEmprestimo, Date dataDevolucao, Date dataPrevisaoDevolucao, Leitor leitor, Livro livro) {
-        super(id, dataEmprestimo, dataDevolucao, dataPrevisaoDevolucao, leitor, livro);
-    }
-
-    DAOEmprestimo() {
+    public DAOEmprestimo(int id, int tipoLeitor, Leitor leitor, Livro livro) {
+        super(id, tipoLeitor, leitor, livro);
     }
     
 public List<Emprestimo> obterTodos(){

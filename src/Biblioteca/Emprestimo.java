@@ -1,31 +1,48 @@
-
 package Biblioteca;
 
+import java.util.Calendar;
 import java.util.Date;
 
-public class Emprestimo{
+public class Emprestimo {
 
-private int id;
-private Date dataEmprestimo;
-private Date dataDevolucao;
-private Date dataPrevisaoDevolucao;
-private Leitor leitor;
-private Livro livro;
+    private int id;
+    private int tipoLeitor;
+    private int dias;
+    private Date dataEmprestimo;
+    private Date dataDevolucao;
+    private Date dataPrevisaoDevolucao;
+    private Leitor leitor;
+    private Livro livro;
 
 //construtor e métodos get e set
-    
-    public Emprestimo(int id, Date dataEmprestimo, Date dataDevolucao, Date dataPrevisaoDevolucao, Leitor leitor, Livro livro) {
+    public Emprestimo(int id, int tipoLeitor, Leitor leitor, Livro livro) {
         this.id = id;
-        this.dataEmprestimo = dataEmprestimo;
-        this.dataDevolucao = dataDevolucao;
-        this.dataPrevisaoDevolucao = dataPrevisaoDevolucao;
         this.leitor = leitor;
         this.livro = livro;
+        this.tipoLeitor = tipoLeitor;
+        //Pegando os dias de acordo ao tipo de leitor
+        switch (tipoLeitor) {
+            case 1:
+                dias = TipoLeitor.ESTUDANTE.getDias();
+                break;
+            case 2:
+                dias = TipoLeitor.BOLSISTA.getDias();
+                break;
+            case 3:
+                dias = TipoLeitor.PROFESSOR.getDias();
+                break;
+        }
+
+        //Data de emprestimo
+        this.dataEmprestimo = new Date();//data do sistema
+
+        //Previsão de entrega
+        Calendar c = Calendar.getInstance();
+        c.setTime(this.dataEmprestimo);
+        c.add(Calendar.DATE, +dias);//acrescentando os dias relativos ao Tipo de leitor à data
+        this.dataPrevisaoDevolucao = c.getTime();
     }
-       
-    public Emprestimo(){
-    
-    }
+
     /**
      * @return the id
      */
@@ -110,11 +127,10 @@ private Livro livro;
         this.livro = livro;
     }
 
-    public String toString(){
+    public String toString() {
 //chamado quando solicitar a impressão de empréstimos. Mostrar todos os dados.
         String x = null;
-        return  x;
-}
-    
-}
+        return x;
+    }
 
+}

@@ -11,7 +11,7 @@ public enum TipoLeitor {
         this.tipoLeitor = tipoLeitor;
         this.dias = dias;
     }
-
+    
     public String getTipoLeitor() {
         return tipoLeitor;
     }

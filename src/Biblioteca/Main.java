@@ -1,7 +1,7 @@
 package Biblioteca;
 
 //Andersdon Leite
-//Hemerson
+//Hemerson Oliveira
 //Giovane Fernandes
 //Uallace Oliveira
 import java.io.IOException;
@@ -44,6 +44,7 @@ public class Main extends Controle {
                 switch (selecao) {
                     case 0:
                         exit(1);
+                        biblioteca.cadastrarLivro("title", "Autor", 1, 12, 179856);
                     case 1:
                         //Cadastro de emprestimo
                         for (int i = 1; cont != 0; i++) {

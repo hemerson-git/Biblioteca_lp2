@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author
  */
-public class Controle extends Emprestimo {
+public class Controle {
 
     private List<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
     private List<Leitor> leitores = new ArrayList<Leitor>();
@@ -21,7 +21,7 @@ public class Controle extends Emprestimo {
 //    private DAOLivro daoLivro;
     private DAOEmprestimo daoEmprestimo;
     private DAOLeitor daoLeitor;
-
+    
     public Controle() {
         //instancia os dados
         //Deixar essa parte para o final:

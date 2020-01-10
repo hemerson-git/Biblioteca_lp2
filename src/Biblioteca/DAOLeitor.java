@@ -2,14 +2,12 @@ package Biblioteca;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
 public class DAOLeitor extends Leitor{
 //dados de arquivo de leitores
 
-    DAOEmprestimo dao = new DAOEmprestimo();
     BufferedWriter saida;
 
     public DAOLeitor(String nome, int i) {

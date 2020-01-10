@@ -16,8 +16,6 @@ import java.util.List;
  * @author giovane
  */
 public class DAOLivro extends  Livro{
-
-    DAOEmprestimo dao = new DAOEmprestimo();
     BufferedWriter saida;
 
     public DAOLivro(int numeroExemplar, int codigo, int status, String titulo, String autor) {
