@@ -18,3 +18,9 @@ Controller - ajustes nas funcoes cadastrarLivro, cadastrarLeitor e criarEmpresti
 MAIN - Implementado todos os métodos com exceção do 2
 CONTROLLER - pequenos ajustes nos métodos de exclusão
 EMPRESTIMO - Falta implementar o toString
+
+MAIN - fixado loop externo
+CONTROLLER - fixado instacia do daoLeitor
+DAOEmprestimo - removido extend desnecessario
+Emprestimo - Implementação do toString() *** FALTA TESTAR ***
+

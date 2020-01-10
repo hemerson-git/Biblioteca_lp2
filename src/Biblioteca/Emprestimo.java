@@ -108,8 +108,13 @@ public class Emprestimo {
 
     public String toString() {
 //chamado quando solicitar a impressão de empréstimos. Mostrar todos os dados.
-        String x = "Impresso com sucesso";
-        return x;
+        String dados = "Nome do Leitor: " + this.leitor.getNome() + "\n" +
+                      "Nome do Livro: " + this.livro.getTitulo()+ "\n" +
+                       "Autor do Livro: " + this.livro.getAutor()+ "\n" +
+                        "Data do Empréstimo: " + this.dataEmprestimo +"\n" +
+                        "Previsão de entrega: " + this.dataPrevisaoDevolucao +"\n" +
+                        "Id do Emprestimo: " + this.id +"\n";
+        return dados;
         
     }
 

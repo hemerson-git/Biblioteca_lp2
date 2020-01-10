@@ -15,14 +15,9 @@ import java.util.List;
  *
  * @author giovane
  */
-public class DAOEmprestimo extends Emprestimo{
+public class DAOEmprestimo {
     BufferedWriter saida;
 
-    public DAOEmprestimo(BufferedWriter saida, int id, Date dataEmprestimo, Date dataDevolucao, Date dataPrevisaoDevolucao, Leitor leitor, Livro livro) {
-        super(id, dataEmprestimo, dataDevolucao, dataPrevisaoDevolucao, leitor, livro);
-        this.saida = saida;
-    }
-    
 public List<Emprestimo> obterTodos(){
 //Ler todos os leitores do arquivo de leitores e retornar uma lista de leitores
 List<Emprestimo> listaEmprestimo = null;

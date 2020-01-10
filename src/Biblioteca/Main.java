@@ -23,9 +23,9 @@ public class Main extends Controle {
 
         Controle biblioteca = new Controle();
 
-        int selecao = -1;
+        int selecao = 0;
 
-        while (selecao == -1) {
+        while (selecao > -1) {
             System.out.println("0 - Sair");
             System.out.println("1 - Criar empréstimo");
             System.out.println("2 - Alterar um empréstimo: ");
@@ -135,15 +135,17 @@ public class Main extends Controle {
                         break;
                     default:
                         JOptionPane.showMessageDialog(null, "A opção escolhida é invalida!", "ERRO", JOptionPane.ERROR_MESSAGE);
-                        selecao = -1;
+                        selecao = 0;
                 }
 
-                biblioteca.gravarTodos();
+                
             } catch (InputMismatchException e) {
                 JOptionPane.showMessageDialog(null, "Digite um número inteiro e válido", "ERRO", JOptionPane.ERROR_MESSAGE);
-                selecao = -1;
+                selecao = 0;
                 teclado.nextLine();
             }
+            biblioteca.gravarTodos();
+            System.out.println(selecao);
         }
     }
 }

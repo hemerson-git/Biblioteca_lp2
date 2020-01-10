@@ -21,8 +21,8 @@ public class Controle {
     private List<Livro> livros = new ArrayList<Livro>();
 
 //    private DAOLivro daoLivro;
-    private DAOEmprestimo daoEmprestimo;
-    private DAOLeitor daoLeitor;
+    private DAOEmprestimo daoEmprestimo = new DAOEmprestimo();
+    private DAOLeitor daoLeitor = new DAOLeitor();
 
     public Controle() {
         //instancia os dados
@@ -34,7 +34,7 @@ public class Controle {
         Livro livroSelecionado = null;
         Leitor leitorSelecionado = null;
         int idEmprestimo = emprestimos.size() + 1;
-        
+
 //      *************************** LIVRO *********************
         for (Livro livro : livros) {
             if (livro.getTitulo().equals(tituloLivro)) {
@@ -42,7 +42,7 @@ public class Controle {
                 break;
             }
         }
-        
+
 //      *************************** LEITOR *********************
         for (Leitor leitor : leitores) {
             if (leitor.getNome().equals(nomeleitor)) {
@@ -76,9 +76,9 @@ public class Controle {
         c.add(Calendar.DATE, +dias);//acrescentando os dias relativos ao Tipo de leitor à data
         dataPrevisaoDevolucao = c.getTime();
 
-        
 //      *************************** CRIAÇÃO DO EMPRESTIMO *********************
         Emprestimo emprestimo = new Emprestimo(idEmprestimo, dataEmprestimo, dataPrevisaoDevolucao, dataDevolucao, leitorSelecionado, livroSelecionado);
+        emprestimos.add(emprestimo);
     }
 
     public void imprimirEmprestimoNome(String nomeLeitor) {
@@ -120,9 +120,11 @@ public class Controle {
                 tipo = TipoLeitor.ESTUDANTE;
         }
         int id = leitores.size() + 1;
-        
+
         Leitor leitor = new Leitor(nomeLeitor, id, tipo);
         leitores.add(leitor);
+        System.out.println("Leitor cadastrado com sucesso! ");
+        System.out.println(leitores.indexOf(leitor));
     }
 
     public void cadastrarLivro(String titulo, String autor, int status, int numeroExemplar) {
@@ -154,8 +156,13 @@ public class Controle {
 
     public void gravarTodos() {
 //        daoLivro.gravarTodos(livros);
-//        daoLeitor.gravarTodos(leitores);
-        daoEmprestimo.gravarTodos(emprestimos);
+        if (leitores.size() > 0) {
+            daoLeitor.gravarTodos(leitores);
+        }
+
+        if (emprestimos.size() > 0) {
+            daoEmprestimo.gravarTodos(emprestimos);
+        }
     }
 
     public void carregarTodos() {
