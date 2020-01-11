@@ -1,27 +1,46 @@
 package Biblioteca;
 
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class DAOLeitor {
 //dados de arquivo de leitores
 
-    BufferedWriter saida;
+    private BufferedWriter saida;
 
     public List<Leitor> obterTodos() {
         List<Leitor> listaLeitor = null;
-        return listaLeitor;
+        try (FileInputStream fis = new FileInputStream("./files/leitores.fos")) {
+            try (ObjectInputStream ois = new ObjectInputStream(fis)) {
+                return listaLeitor = (List<Leitor>) ois.readObject();
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public void gravarTodos(List<Leitor> leitores) {
-//Ler todos os leitors da lista leitores e gravar em arquivo
+    public void gravarTodos(List<Leitor> leitores) throws IOException {
+        //Ler todos os leitors da lista leitores e gravar em arquivo
+        criarArquivo();
+        try (FileOutputStream fos = new FileOutputStream("./files/leitores.fos")) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                oos.writeObject(leitores);
+            }
+        }
     }
 
     public Leitor getLeitorByID(List<Leitor> leitores, int idLeitor) {
-//Procurar o leitor idLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
-
+        //Procurar o leitor idLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
         if (!leitores.isEmpty()) {
             Leitor obj;
             for (int i = 0; i < leitores.size(); i++) {
@@ -45,16 +64,20 @@ public class DAOLeitor {
         return null;
     }
 
-    
     public boolean criarArquivo() {
-        
         boolean flag = true;
-        
-            //saida = new BufferedWriter(new FileWriter(dao.getNomeArquivo()));
-        
-            //System.err.println("Erro ao criar o arquivo!\n" + e);
-            flag = false;
-        
+        Path path = Paths.get("./files/leitores.fos");
+        if (!Files.exists(path)) {
+            try {
+                Path path2 = Paths.get("./files");
+                Files.createDirectory(path2);
+                Files.createFile(path);
+            } catch (IOException e) {
+                System.out.println("Impossível gravar o arquivo");
+                flag = false;
+            }
+        }
+
         return flag;
     }
 
@@ -76,7 +99,6 @@ public class DAOLeitor {
         return flag;
     }
 
-   
     public boolean gravarLinha(String linha) {
         boolean flag = true;
 

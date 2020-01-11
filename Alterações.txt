@@ -24,3 +24,7 @@ CONTROLLER - fixado instacia do daoLeitor
 DAOEmprestimo - removido extend desnecessario
 Emprestimo - Implementação do toString() *** FALTA TESTAR ***
 
+MAIN - falta apenas implementar o segundo método
+DAOLeitor - já está gravando e lendo do arquivo
+Controller - Já está usando o DAOLeitor para gravar e ler do arquivo
+

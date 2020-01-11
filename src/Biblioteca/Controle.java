@@ -5,6 +5,7 @@
  */
 package Biblioteca;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,17 +18,17 @@ import java.util.List;
 public class Controle {
 
     private List<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
-    private List<Leitor> leitores = new ArrayList<Leitor>();
     private List<Livro> livros = new ArrayList<Livro>();
+    private DAOLeitor daoLeitor = new DAOLeitor();
 
 //    private DAOLivro daoLivro;
     private DAOEmprestimo daoEmprestimo = new DAOEmprestimo();
-    private DAOLeitor daoLeitor = new DAOLeitor();
+    private List<Leitor> leitores = new ArrayList<>();
 
-    public Controle() {
+    public Controle(){
         //instancia os dados
         //Deixar essa parte para o final:
-        //carregarTodos();
+        carregarTodos();
     }
 
     public void criarEmprestimo(String nomeleitor, String tituloLivro) {
@@ -91,7 +92,7 @@ public class Controle {
 
     public void imprimirTodos() {
         for (Emprestimo emprestimo : emprestimos) {
-            emprestimo.toString();
+            System.out.println(emprestimo.toString());
         }
     }
 
@@ -155,9 +156,12 @@ public class Controle {
     }
 
     public void gravarTodos() {
-//        daoLivro.gravarTodos(livros);
         if (leitores.size() > 0) {
-            daoLeitor.gravarTodos(leitores);
+            try {
+                daoLeitor.gravarTodos(leitores);
+            } catch (IOException e) {
+                System.out.println("Impossivel gravar leitores");
+            }
         }
 
         if (emprestimos.size() > 0) {
@@ -168,7 +172,5 @@ public class Controle {
     public void carregarTodos() {
         emprestimos = daoEmprestimo.obterTodos();
         leitores = daoLeitor.obterTodos();
-//        livros = daoLivro.obterTodos();
-
     }
 }

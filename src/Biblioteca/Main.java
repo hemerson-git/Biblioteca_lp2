@@ -41,7 +41,8 @@ public class Main extends Controle {
 
                 switch (selecao) {
                     case 0:
-                        exit(1);
+                        exit(0);
+                        break;
                     case 1:
                         //Cadastro de emprestimo
                         int continuar3 = 1;
@@ -54,7 +55,7 @@ public class Main extends Controle {
                             biblioteca.criarEmprestimo(leitor, livro);
 
                             System.out.println("Deseja fazer outro emprestimo? 1-SIM 2-NÃO");
-                            int continuar = teclado.nextInt();
+                            continuar3 = teclado.nextInt();
                         }
                         break;
 
@@ -145,7 +146,6 @@ public class Main extends Controle {
                 teclado.nextLine();
             }
             biblioteca.gravarTodos();
-            System.out.println(selecao);
         }
     }
 }

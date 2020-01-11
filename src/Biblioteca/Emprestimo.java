@@ -1,5 +1,6 @@
 package Biblioteca;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Emprestimo {
@@ -108,11 +109,14 @@ public class Emprestimo {
 
     public String toString() {
 //chamado quando solicitar a impressão de empréstimos. Mostrar todos os dados.
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String dataFormatadaEmprestimo = dateFormat.format(this.dataEmprestimo);
+        String dataFormatadaPrevisao = dateFormat.format(this.dataPrevisaoDevolucao);
         String dados = "Nome do Leitor: " + this.leitor.getNome() + "\n" +
                       "Nome do Livro: " + this.livro.getTitulo()+ "\n" +
                        "Autor do Livro: " + this.livro.getAutor()+ "\n" +
-                        "Data do Empréstimo: " + this.dataEmprestimo +"\n" +
-                        "Previsão de entrega: " + this.dataPrevisaoDevolucao +"\n" +
+                        "Data do Empréstimo: " + dataFormatadaEmprestimo +"\n" +
+                        "Previsão de entrega: " + dataFormatadaPrevisao +"\n" +
                         "Id do Emprestimo: " + this.id +"\n";
         return dados;
         

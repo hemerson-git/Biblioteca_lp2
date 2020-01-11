@@ -1,8 +1,11 @@
 package Biblioteca;
 
 // A classe esta pronta, TALVEZ precise gerar os metodos hasCode e equals
+
+import java.io.Serializable;
+
 //Consultar hemerson
-public class Leitor{
+public class Leitor implements Serializable{
 
     private String nome;
     private int idLeitor;
