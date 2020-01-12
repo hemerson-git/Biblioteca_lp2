@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author
  */
-public class Controle{
+public class Controle {
 
     private DAOEmprestimo daoEmprestimo = new DAOEmprestimo();
     private DAOLeitor daoLeitor = new DAOLeitor();
@@ -56,18 +56,19 @@ public class Controle{
         Date dataEmprestimo;
         Date dataPrevisaoDevolucao;
         Date dataDevolucao = null;
-        switch (leitorSelecionado.getTipoLeitor()) {
-            case ESTUDANTE:
-                dias = TipoLeitor.ESTUDANTE.getDias();
-                break;
-            case BOLSISTA:
-                dias = TipoLeitor.BOLSISTA.getDias();
-                break;
-            case PROFESSOR:
-                dias = TipoLeitor.PROFESSOR.getDias();
-                break;
+        if (leitorSelecionado != null) {
+            switch (leitorSelecionado.getTipoLeitor()) {
+                case ESTUDANTE:
+                    dias = TipoLeitor.ESTUDANTE.getDias();
+                    break;
+                case BOLSISTA:
+                    dias = TipoLeitor.BOLSISTA.getDias();
+                    break;
+                case PROFESSOR:
+                    dias = TipoLeitor.PROFESSOR.getDias();
+                    break;
+            }
         }
-
         //Data de emprestimo
         dataEmprestimo = new Date();//data do sistema
 
@@ -76,10 +77,19 @@ public class Controle{
         c.setTime(dataEmprestimo);
         c.add(Calendar.DATE, +dias);//acrescentando os dias relativos ao Tipo de leitor à data
         dataPrevisaoDevolucao = c.getTime();
-
 //      *************************** CRIAÇÃO DO EMPRESTIMO *********************
-        Emprestimo emprestimo = new Emprestimo(idEmprestimo, dataEmprestimo, dataPrevisaoDevolucao, dataDevolucao, leitorSelecionado, livroSelecionado);
-        emprestimos.add(emprestimo);
+        if (leitorSelecionado != null && livroSelecionado != null && livroSelecionado.getNumeroExemplar() > 0) {
+            Emprestimo emprestimo = new Emprestimo(idEmprestimo, dataEmprestimo, dataDevolucao, dataPrevisaoDevolucao, leitorSelecionado, livroSelecionado);
+            emprestimos.add(emprestimo);
+            livroSelecionado.setStatus(1);
+            livroSelecionado.setNumeroExemplar(livroSelecionado.getNumeroExemplar() - 1);
+            System.out.println("Empréstimo realizado com sucesso! ");
+        } else if (leitorSelecionado == null) {
+            System.out.println("O leitor selecionado não está cadastrado");
+        } else {
+            livroSelecionado.setStatus(0);
+            System.out.println("Livro não disponível");
+        }
     }
 
     public void imprimirEmprestimoNome(String nomeLeitor) {
@@ -100,7 +110,8 @@ public class Controle{
         //tornar o livro não emprestado e alterar a data de devolução
         for (Emprestimo emprestimo : emprestimos) {
             if (emprestimo.getId() == idEmprestimo) {
-                emprestimo.getLivro().setStatus(0);
+                emprestimo.getLivro().setNumeroExemplar(emprestimo.getLivro().getNumeroExemplar() + 1);
+                emprestimo.setDataDevolucao(new Date());
             }
         }
     }
@@ -130,7 +141,7 @@ public class Controle{
 
     public void cadastrarLivro(String titulo, String autor, int status, int numeroExemplar) {
         int codigoLivro = livros.size() + 1;
-        Livro livro = new Livro(numeroExemplar, codigoLivro, status, titulo, autor);
+        Livro livro = new Livro(numeroExemplar, codigoLivro, titulo, autor);
         livros.add(livro);
         System.out.println("Cadastro realizado com sucesso");
     }
@@ -145,12 +156,6 @@ public class Controle{
         }
     }
 
-    public void imprimirTodosLivros() {
-        for (Leitor leitor : leitores) {
-            System.out.println("ID" + leitor.getIdLeitor() + "Nome: " + leitor.getNome());
-        }
-    }
-    
     public void excluirLeitor(int idLeitor) {
         for (Leitor leitor : leitores) {
             if (leitor.getIdLeitor() == idLeitor) {
@@ -171,7 +176,12 @@ public class Controle{
         }
 
         if (emprestimos.size() > 0) {
-            daoEmprestimo.gravarTodos(emprestimos);
+            try {
+                daoEmprestimo.gravarTodos(emprestimos);
+
+            } catch (IOException e) {
+                System.out.println("Impossível gravar emprestimos");
+            }
         }
 
         if (livros.size() > 0) {

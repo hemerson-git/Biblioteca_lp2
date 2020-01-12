@@ -6,8 +6,15 @@
 package Biblioteca;
 
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
@@ -16,48 +23,75 @@ import java.util.List;
  * @author giovane
  */
 public class DAOEmprestimo {
+
     BufferedWriter saida;
+    private List<Emprestimo> emprestimos = obterTodos();
 
-public List<Emprestimo> obterTodos(){
-//Ler todos os leitores do arquivo de leitores e retornar uma lista de leitores
-List<Emprestimo> listaEmprestimo = null;
-    return listaEmprestimo;
-}
+    public List<Emprestimo> obterTodos() {
+        //Retorna uma lista com todos os emprestimos    
+        List<Emprestimo> listaEmprestimos = null;
+        try (FileInputStream fis = new FileInputStream("./files/emprestimos.fos")) {
+            try (ObjectInputStream ois = new ObjectInputStream(fis)) {
+                return listaEmprestimos = (List<Emprestimo>) ois.readObject();
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            return null;
+        }
+    }
 
-
-public void gravarTodos(List<Emprestimo> emprestimo){
-    
-//Ler todos os leitors da lista leitores e gravar em arquivo
-}
-
-public Emprestimo getEmprestimoByID(List<Emprestimo> emprestimo, int idEmprestimo){
-//Procurar o leitor idLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
-
-    
-if (!emprestimo.isEmpty()){
-    Emprestimo obj;        
-        for(int i=0; i<emprestimo.size(); i++){
-             obj = (Emprestimo) emprestimo.get(i); 
-             if (obj.getId()==idEmprestimo){
-                    return obj;                    
-                }    
+    public void gravarTodos(List<Emprestimo> emprestimo) throws IOException {
+        //Grava a lista de emprestimos em uma arquivo
+        criarArquivo();
+        try (FileOutputStream fos = new FileOutputStream("./files/emprestimos.fos")) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                oos.writeObject(emprestimo);
             }
         }
-        
-    return null;
-}
+    }
 
-public Emprestimo getEmprestimoByNome(List<Emprestimo> emprestimo, String nomeLeitor){
-//Procurar o leitor nomeLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
- Emprestimo emprestimoNome = null;
-    return emprestimoNome;
+    public Emprestimo getEmprestimoByID(int idEmprestimo) {
+        //Procurar o leitor idLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
+        if (!emprestimos.isEmpty()) {
+            for (Emprestimo emprestimo : emprestimos) {
+                if (emprestimo.getId() == idEmprestimo) {
+                    return emprestimo;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Emprestimo getEmprestimoByNome(String nomeLeitor) {
+        //Procurar o leitor nomeLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
+        Emprestimo emprestimoNome = null;
+        if (!emprestimos.isEmpty()) {
+            for (Emprestimo emprestimo : emprestimos) {
+                if (emprestimo.getLeitor().getNome().equals(nomeLeitor)) {
+                    return emprestimo;
+                }
+            }
+        }
+
+        System.out.println("Empréstimo não encontrado");
+        return emprestimoNome;
     }
 
     public boolean criarArquivo() {
-       boolean flag = true;
-       
-            // saida = new BufferedWriter(new FileWriter(dao.getNomeArquivo()));
-        
+        boolean flag = true;
+        Path path = Paths.get("./files/emprestimos.fos");
+        if (!Files.exists(path)) {
+            try {
+                Path path2 = Paths.get("./files");
+                if (!Files.exists(path2)) {
+                    Files.createDirectory(path2);
+                }
+                Files.createFile(path);
+            } catch (IOException e) {
+                System.out.println("Impossível gravar o arquivo");
+                flag = false;
+            }
+        }
         return flag;
     }
 
@@ -70,17 +104,17 @@ public Emprestimo getEmprestimoByNome(List<Emprestimo> emprestimo, String nomeLe
                 }
             }
         } catch (FileNotFoundException e) {
-            System.err.println("Erro, arquivo não encontrado!\n"+e);  
+            System.err.println("Erro, arquivo não encontrado!\n" + e);
             flag = false;
         } catch (IOException e) {
-            System.err.println("Erro, ao gravar linha!\n"+e);
+            System.err.println("Erro, ao gravar linha!\n" + e);
             flag = false;
         }
         return flag;
     }
 
     public boolean gravarLinha(String linha) {
-    boolean flag = true;
+        boolean flag = true;
 
         try {
             if (linha != null) {

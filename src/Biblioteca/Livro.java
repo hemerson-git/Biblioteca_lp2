@@ -13,10 +13,14 @@ private int status;
 private String titulo;
 private String autor;
 
-     public Livro(int numeroExemplar, int codigo, int status, String titulo, String autor) {
+     public Livro(int numeroExemplar, int codigo, String titulo, String autor) {
         this.numeroExemplar = numeroExemplar;
         this.codigo = codigo;
-        this.status = status;
+        if (this.numeroExemplar > 0) {
+            this.status = 1;
+        } else {
+            this.status = 0;
+        }
         this.titulo = titulo;
         this.autor = autor;
     }

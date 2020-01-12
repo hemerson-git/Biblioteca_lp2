@@ -1,9 +1,10 @@
 package Biblioteca;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Emprestimo {
+public class Emprestimo implements Serializable{
 
     private int id;
     private Date dataEmprestimo;
@@ -112,9 +113,13 @@ public class Emprestimo {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dataFormatadaEmprestimo = dateFormat.format(this.dataEmprestimo);
         String dataFormatadaPrevisao = dateFormat.format(this.dataPrevisaoDevolucao);
+        String status = (this.livro.getStatus() == 1) ? "Disponível": "Esgotado";
         String dados = "Nome do Leitor: " + this.leitor.getNome() + "\n" +
                       "Nome do Livro: " + this.livro.getTitulo()+ "\n" +
                        "Autor do Livro: " + this.livro.getAutor()+ "\n" +
+                       "Status do Livro: " + status + "\n" +
+                       "Código do Livro: " + this.livro.getCodigo() + "\n" +
+                       "Número de exemplares disponíveis: " + this.livro.getNumeroExemplar()+ "\n" +
                         "Data do Empréstimo: " + dataFormatadaEmprestimo +"\n" +
                         "Previsão de entrega: " + dataFormatadaPrevisao +"\n" +
                         "Id do Emprestimo: " + this.id +"\n";

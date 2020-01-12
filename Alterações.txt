@@ -32,3 +32,9 @@ MAIN - Pequenos ajustes
 DAOLeitor - já está gravando e lendo do arquivo + correção de bugs
 DAOLivros - já está gravando e lendo do arquivo + correçao de bugs
 Controler - Já está gravando, lendo e excluido Livros e Leitores
+
+Controller - adicionado verificação se o livro está disponível e se o usuário e livro estão cadastrados no sístema, método de devolução já está funcionando, impressão de impréstimo pelo nome de Leitor e imprimir todos ,também. 
+Emprestimo - toString já está funcionando
+DAOEmprestiomo - Já está fazendo exclusão, criação e leitura pelo arquivo
+Livro - modificado para que o status seja gerado automaticamente de acordo à quantidade de exemplares disponíveis
+

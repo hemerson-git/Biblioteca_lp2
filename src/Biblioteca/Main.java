@@ -65,6 +65,7 @@ public class Main extends Controle {
                         break;
                     case 3:
                         //imprime um empréstimo
+                        System.out.print("Informe o nome do Leitor: ");
                         String nomeLeitor = teclado.next();
                         biblioteca.imprimirEmprestimoNome(nomeLeitor);
                         break;
@@ -82,10 +83,10 @@ public class Main extends Controle {
                             String autor = teclado.next();
                             System.out.print("Digite o número de exemplares: ");
                             int numeroExemplar = teclado.nextInt();
-                            System.out.print("Digite o status do livro: ");
-                            int status = teclado.nextInt();
+                            System.out.print("Código do livro: ");
+                            int codigoLivro = teclado.nextInt();
 
-                            biblioteca.cadastrarLivro(titulo, autor, status, numeroExemplar);
+                            biblioteca.cadastrarLivro(titulo, autor, codigoLivro, numeroExemplar);
 
                             System.out.println("Deseja cadastrar novamente? 1-SIM 2-NÃO");
                             continuar = teclado.nextInt();
