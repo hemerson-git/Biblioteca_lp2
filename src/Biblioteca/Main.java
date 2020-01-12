@@ -35,7 +35,7 @@ public class Main extends Controle {
             System.out.println("6 - Cadastrar leitor: ");
             System.out.println("7 - Excluir livro: ");
             System.out.println("8 - Excluir leitor: ");
-            System.out.println("8 - Imprimir todos os livros: ");
+            System.out.println("9 - Imprimir todos os livros: ");
 
             try {
                 selecao = teclado.nextInt();
