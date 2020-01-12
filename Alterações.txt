@@ -38,3 +38,7 @@ Emprestimo - toString já está funcionando
 DAOEmprestiomo - Já está fazendo exclusão, criação e leitura pelo arquivo
 Livro - modificado para que o status seja gerado automaticamente de acordo à quantidade de exemplares disponíveis
 
+MAIN - implementado o método de alterar empréstimo, adicionado método de imprimir todos os livros (temp)
+Controler - método de alterar emprétimo já está funcionando, pequena modificação visul no modo de imprimir todos, adicionado verificação se o livro já não foi devolvido ao tentar devolver.
+Empréstimo - adicionado ao toString, verificação, se a data de devolução for diferente de null, ela tabém é adicionada à String 
+

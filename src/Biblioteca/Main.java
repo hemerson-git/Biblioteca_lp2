@@ -35,6 +35,7 @@ public class Main extends Controle {
             System.out.println("6 - Cadastrar leitor: ");
             System.out.println("7 - Excluir livro: ");
             System.out.println("8 - Excluir leitor: ");
+            System.out.println("8 - Imprimir todos os livros: ");
 
             try {
                 selecao = teclado.nextInt();
@@ -61,6 +62,38 @@ public class Main extends Controle {
                         break;
 
                     case 2:
+                        System.out.println("Informe o ID do empréstimo: ");
+                        int id = teclado.nextInt();
+                        System.out.println("O que deseja fazer?");
+                        System.out.println("1- Devolver Livro 2-Alterar dado: ");
+                        int escolha = teclado.nextInt();
+
+                        switch (escolha) {
+                            case 1:
+                                biblioteca.devolverLivro(id);
+                                break;
+                            case 2:
+                                System.out.println("O que deseja alterar?");
+                                System.out.print("1 - Alterar Livro 2 - Alterar Leitor");
+                                int esc = teclado.nextInt();
+
+                                switch (esc) {
+                                    case 1:
+                                        System.out.print("título do livro: ");
+                                        String titulo = teclado.next();
+                                        biblioteca.alterarEmprestimo(id, esc, titulo);
+                                        break;
+                                    case 2:
+                                        System.out.print("Nome do leitor: ");
+                                        String nome = teclado.next();
+                                        biblioteca.alterarEmprestimo(id, esc, nome);
+                                        break;
+                                    default:
+                                        System.out.println("Opção inválida!!");
+                                        break;
+                                }
+                        }
+
                         System.out.println(selecao);
                         break;
                     case 3:
@@ -136,18 +169,20 @@ public class Main extends Controle {
                             continuarExcluirLeitor = teclado.nextInt();
                         }
                         break;
+                    case 9:
+                        biblioteca.imprimirTodosLivros();
+                        break;
                     default:
                         JOptionPane.showMessageDialog(null, "A opção escolhida é invalida!", "ERRO", JOptionPane.ERROR_MESSAGE);
                         selecao = 0;
                 }
 
-                
             } catch (InputMismatchException e) {
                 JOptionPane.showMessageDialog(null, "Digite um número inteiro e válido", "ERRO", JOptionPane.ERROR_MESSAGE);
                 selecao = 0;
                 teclado.nextLine();
             }
-            
+
         }
     }
 }

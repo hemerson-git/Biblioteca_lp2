@@ -123,6 +123,10 @@ public class Emprestimo implements Serializable{
                         "Data do Empréstimo: " + dataFormatadaEmprestimo +"\n" +
                         "Previsão de entrega: " + dataFormatadaPrevisao +"\n" +
                         "Id do Emprestimo: " + this.id +"\n";
+        if (this.dataDevolucao != null) {
+            String dataFormatadaDevolucao = dateFormat.format(this.dataDevolucao);
+            dados += "Data de devolução: " + dataFormatadaDevolucao + "\n";
+        }
         return dados;
         
     }

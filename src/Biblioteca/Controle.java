@@ -100,18 +100,51 @@ public class Controle {
         }
     }
 
+    public void alterarEmprestimo(int idEmprestimo, int operacao, String valor) {
+        for (Emprestimo emprestimo : emprestimos) {
+            if (emprestimo.getId() == idEmprestimo) {
+                switch (operacao) {
+                    case 1:
+                        for (Livro livro : livros) {
+                            if(livro.getTitulo().equals(valor)) {
+                                emprestimo.setLivro(livro);
+                            }
+                        }
+                        break;
+                    case 2:
+                        for (Leitor leitor : leitores) {
+                            if(leitor.getNome().equals(valor)) {
+                                emprestimo.setLeitor(leitor);
+                            }
+                        }
+                        break;
+                    default:
+                        System.out.println("Dados não cadastrados");
+                        break;
+                }
+            }
+        }
+    }
+
     public void imprimirTodos() {
         for (Emprestimo emprestimo : emprestimos) {
+            System.out.println("\n***********************************************");
             System.out.println(emprestimo.toString());
+            System.out.println("***********************************************\n");
         }
     }
 
     public void devolverLivro(int idEmprestimo) {
         //tornar o livro não emprestado e alterar a data de devolução
         for (Emprestimo emprestimo : emprestimos) {
-            if (emprestimo.getId() == idEmprestimo) {
+            //Vefica se exite um livro com o ID passado e se esse livro ainda não foi devolvido
+            //caso seja atendidas, aumenta o número de exemplares disponíveis, e configura a data de entrega para
+            //a data atual do sistema.
+            
+            if (emprestimo.getId() == idEmprestimo && emprestimo.getDataDevolucao() == null) {
                 emprestimo.getLivro().setNumeroExemplar(emprestimo.getLivro().getNumeroExemplar() + 1);
-                emprestimo.setDataDevolucao(new Date());
+                Date data = new Date();
+                emprestimo.setDataDevolucao(data);
             }
         }
     }
@@ -147,6 +180,8 @@ public class Controle {
     }
 
     public void excluirLivro(String nomeLivro) {
+        //Verifica se o livro passado exite nos livros cadastrados
+        //caso sim, esse é removido.
         for (Livro livro : livros) {
             if (livro.getTitulo().equals(nomeLivro)) {
                 livros.remove(livro);
@@ -157,6 +192,8 @@ public class Controle {
     }
 
     public void excluirLeitor(int idLeitor) {
+        //Verifica se o leitor passado exite nos leitores cadastrados
+        //caso sim, esse é removido.
         for (Leitor leitor : leitores) {
             if (leitor.getIdLeitor() == idLeitor) {
                 leitores.remove(leitor);
@@ -191,6 +228,12 @@ public class Controle {
                 e.printStackTrace();
                 System.out.println("Impossível gravar livros");
             }
+        }
+    }
+    
+    public void imprimirTodosLivros() {
+        for (Livro livro : livros) {
+            System.out.println(livro.getTitulo());
         }
     }
 
