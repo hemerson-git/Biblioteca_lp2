@@ -1,41 +1,49 @@
 package Biblioteca;
 
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
-/**
- *
- * @author Hemerson
- *          Giovane
- *          Anderson
- *          Ualace
- */
 public class DAOLivro {
 
+//dados de arquivo de leitores
     private BufferedWriter saida;
+    private List<Livro> livros = obterTodos();
 
     public List<Livro> obterTodos() {
-        //Ler todos os leitores do arquivo de leitores e retornar uma lista de leitores
-        List<Livro> listaLivro = null;
-        return listaLivro;
+        List<Livro> listaLivros = null;
+        try (FileInputStream fis = new FileInputStream("./files/livros.fos")) {
+            try (ObjectInputStream ois = new ObjectInputStream(fis)) {
+                return listaLivros = (List<Livro>) ois.readObject();
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            return null;
+        }
     }
 
-    public void gravarTodos(List<Livro> livro) {
-
-//Ler todos os livro da lista leitores e gravar em arquivo
+    public void gravarTodos(List<Livro> livros) throws IOException {
+        //Ler todos os leitors da lista leitores e gravar em arquivo
+        criarArquivo();
+        try (FileOutputStream fos = new FileOutputStream("./files/livros.fos")) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                oos.writeObject(livros);
+            }
+        }
     }
 
-    public Emprestimo getEmprestimoByID(List<Emprestimo> emprestimo, int idEmprestimo) {
-//Procurar o leitor idLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
-
-        if (!emprestimo.isEmpty()) {
-            Emprestimo obj;
-            for (int i = 0; i < emprestimo.size(); i++) {
-                obj = (Emprestimo) emprestimo.get(i);
-                if (obj.getId() == idEmprestimo) {
-                    return obj;
+    public Livro getLivroByCodigo(int codigoLivro) {
+        //Procurar o leitor idLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
+        if (!livros.isEmpty()) {
+            for (Livro livro : livros) {
+                if (livro.getCodigo() == codigoLivro) {
+                    return livro;
                 }
             }
         }
@@ -43,52 +51,32 @@ public class DAOLivro {
         return null;
     }
 
-    public Emprestimo getEmprestimoByNome(List<Emprestimo> emprestimo, String nomeLeitor) {
-//Procurar o leitor nomeLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
-        Emprestimo emprestimoNome = null;
-        return emprestimoNome;
+    public Livro getLivroByTitulo(String tituloLivro) {
+        //Procurar o título do livro na lista leitores e retornar o objeto.
+        for (Livro livro : livros) {
+            if (livro.getTitulo().equals(tituloLivro)) {
+                return livro;
+            }
+        }
+        return null;
     }
 
     public boolean criarArquivo() {
         boolean flag = true;
-
-        // saida = new BufferedWriter(new FileWriter(dao.getNomeArquivo()));
-        return flag;
-    }
-
-    public boolean gravarLinhas(String[] linhas) {
-        boolean flag = true;
-        try {
-            for (int i = 0; i < linhas.length; i++) {
-                if (linhas[i] != null) {
-                    saida.write(linhas[i] + "\n");
+        Path path = Paths.get("./files/livros.fos");
+        if (!Files.exists(path)) {
+            try {
+                Path path2 = Paths.get("./files");
+                if (!Files.exists(path2)) {
+                    Files.createDirectory(path2);
                 }
+                Files.createFile(path);
+            } catch (IOException e) {
+                System.out.println("Impossível gravar o arquivo");
+                flag = false;
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("Erro, arquivo não encontrado!\n" + e);
-            flag = false;
-        } catch (IOException e) {
-            System.err.println("Erro, ao gravar linha!\n" + e);
-            flag = false;
         }
+
         return flag;
     }
-
-    public boolean gravarLinha(String linha) {
-        boolean flag = true;
-
-        try {
-            if (linha != null) {
-                saida.write(linha + "\n");
-            }
-        } catch (IOException e) {
-            flag = false;
-        }
-        return flag;
-    }
-
-    public boolean fecharArquivo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

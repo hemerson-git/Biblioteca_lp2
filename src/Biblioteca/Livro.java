@@ -1,5 +1,8 @@
 package Biblioteca;
-public class Livro{
+
+import java.io.Serializable;
+
+public class Livro implements Serializable{
     
 // A classe esta pronta, TALVEZ precise gerar os metodos hasCode e equals
 //Consultar hemerson

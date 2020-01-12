@@ -28,3 +28,7 @@ MAIN - falta apenas implementar o segundo método
 DAOLeitor - já está gravando e lendo do arquivo
 Controller - Já está usando o DAOLeitor para gravar e ler do arquivo
 
+MAIN - Pequenos ajustes
+DAOLeitor - já está gravando e lendo do arquivo + correção de bugs
+DAOLivros - já está gravando e lendo do arquivo + correçao de bugs
+Controler - Já está gravando, lendo e excluido Livros e Leitores

@@ -15,17 +15,16 @@ import java.util.List;
  *
  * @author
  */
-public class Controle {
+public class Controle{
 
-    private List<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
-    private List<Livro> livros = new ArrayList<Livro>();
-    private DAOLeitor daoLeitor = new DAOLeitor();
-
-//    private DAOLivro daoLivro;
     private DAOEmprestimo daoEmprestimo = new DAOEmprestimo();
+    private DAOLeitor daoLeitor = new DAOLeitor();
+    private DAOLivro daoLivro = new DAOLivro();
     private List<Leitor> leitores = new ArrayList<>();
+    private List<Emprestimo> emprestimos = new ArrayList<>();
+    private List<Livro> livros = new ArrayList<>();
 
-    public Controle(){
+    public Controle() {
         //instancia os dados
         //Deixar essa parte para o final:
         carregarTodos();
@@ -48,6 +47,7 @@ public class Controle {
         for (Leitor leitor : leitores) {
             if (leitor.getNome().equals(nomeleitor)) {
                 leitorSelecionado = leitor;
+                break;
             }
         }
 
@@ -135,20 +135,26 @@ public class Controle {
         System.out.println("Cadastro realizado com sucesso");
     }
 
-    public void excluirLivro(int idLivro) {
+    public void excluirLivro(String nomeLivro) {
         for (Livro livro : livros) {
-            if (livro.getCodigo() == idLivro) {
-                livro = null;
+            if (livro.getTitulo().equals(nomeLivro)) {
+                livros.remove(livro);
                 System.out.println("Livro excluído com sucesso!");
                 break;
             }
         }
     }
 
+    public void imprimirTodosLivros() {
+        for (Leitor leitor : leitores) {
+            System.out.println("ID" + leitor.getIdLeitor() + "Nome: " + leitor.getNome());
+        }
+    }
+    
     public void excluirLeitor(int idLeitor) {
         for (Leitor leitor : leitores) {
             if (leitor.getIdLeitor() == idLeitor) {
-                leitor = null;
+                leitores.remove(leitor);
                 System.out.println("Leitor excluído com sucesso!");
                 break;
             }
@@ -167,10 +173,28 @@ public class Controle {
         if (emprestimos.size() > 0) {
             daoEmprestimo.gravarTodos(emprestimos);
         }
+
+        if (livros.size() > 0) {
+            try {
+                daoLivro.gravarTodos(livros);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Impossível gravar livros");
+            }
+        }
     }
 
     public void carregarTodos() {
-        emprestimos = daoEmprestimo.obterTodos();
-        leitores = daoLeitor.obterTodos();
+        if (daoEmprestimo.obterTodos() != null) {
+            emprestimos = daoEmprestimo.obterTodos();
+        }
+
+        if (daoLivro.obterTodos() != null) {
+            livros = daoLivro.obterTodos();
+        }
+
+        if (daoLeitor.obterTodos() != null) {
+            leitores = daoLeitor.obterTodos();
+        }
     }
 }

@@ -2,7 +2,6 @@ package Biblioteca;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,9 +12,10 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class DAOLeitor {
-//dados de arquivo de leitores
 
+//dados de arquivo de leitores
     private BufferedWriter saida;
+    private List<Leitor> leitores = obterTodos();
 
     public List<Leitor> obterTodos() {
         List<Leitor> listaLeitor = null;
@@ -24,7 +24,6 @@ public class DAOLeitor {
                 return listaLeitor = (List<Leitor>) ois.readObject();
             }
         } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -39,14 +38,12 @@ public class DAOLeitor {
         }
     }
 
-    public Leitor getLeitorByID(List<Leitor> leitores, int idLeitor) {
+    public Leitor getLeitorByID(int idLeitor) {
         //Procurar o leitor idLeitor na lista leitores e retornar o objeto. //Retornar null se não encontrar
         if (!leitores.isEmpty()) {
-            Leitor obj;
-            for (int i = 0; i < leitores.size(); i++) {
-                obj = (Leitor) leitores.get(i);
-                if (obj.getIdLeitor() == idLeitor) {
-                    return obj;
+            for (Leitor leitor : leitores) {
+                if (leitor.getIdLeitor() == idLeitor) {
+                    return leitor;
                 }
             }
         }
@@ -54,9 +51,9 @@ public class DAOLeitor {
         return null;
     }
 
-    public Leitor getLeitorByNome(List<Leitor> leitors, String nomeLeitor) {
+    public Leitor getLeitorByNome(String nomeLeitor) {
         //Procurar o leitor nomeLeitor na lista leitores e retornar o objeto.
-        for (Leitor leitor : leitors) {
+        for (Leitor leitor : leitores) {
             if (leitor.getNome().equals(nomeLeitor)) {
                 return leitor;
             }
@@ -70,7 +67,9 @@ public class DAOLeitor {
         if (!Files.exists(path)) {
             try {
                 Path path2 = Paths.get("./files");
-                Files.createDirectory(path2);
+                if (!Files.exists(path2)) {
+                    Files.createDirectory(path2);
+                }
                 Files.createFile(path);
             } catch (IOException e) {
                 System.out.println("Impossível gravar o arquivo");
@@ -79,40 +78,5 @@ public class DAOLeitor {
         }
 
         return flag;
-    }
-
-    public boolean gravarLinhas(String[] linhas) {
-        boolean flag = true;
-        try {
-            for (String linha : linhas) {
-                if (linha != null) {
-                    saida.write(linha + "\n");
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("Erro, arquivo não encontrado!\n" + e);
-            flag = false;
-        } catch (IOException e) {
-            System.err.println("Erro, ao gravar linha!\n" + e);
-            flag = false;
-        }
-        return flag;
-    }
-
-    public boolean gravarLinha(String linha) {
-        boolean flag = true;
-
-        try {
-            if (linha != null) {
-                saida.write(linha + "\n");
-            }
-        } catch (IOException e) {
-            flag = false;
-        }
-        return flag;
-    }
-
-    public boolean fecharArquivo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

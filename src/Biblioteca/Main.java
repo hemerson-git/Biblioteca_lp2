@@ -41,6 +41,7 @@ public class Main extends Controle {
 
                 switch (selecao) {
                     case 0:
+                        biblioteca.gravarTodos();
                         exit(0);
                         break;
                     case 1:
@@ -113,9 +114,9 @@ public class Main extends Controle {
                         //Excluir livro
                         int continuarExcluirLivro = 1;
                         while (continuarExcluirLivro == 1) {
-                            System.out.print("Informe o id do Livro a ser excluído: ");
-                            int idLivroExcluir = teclado.nextInt();
-                            biblioteca.excluirLivro(idLivroExcluir);
+                            System.out.print("Informe o nome do Livro a ser excluído: ");
+                            String nomeLivroExcluir = teclado.next();
+                            biblioteca.excluirLivro(nomeLivroExcluir);
 
                             System.out.print("Deseja excluir outro livro? 1-SIM 2-NÃO");
                             continuarExcluirLivro = teclado.nextInt();
@@ -145,7 +146,7 @@ public class Main extends Controle {
                 selecao = 0;
                 teclado.nextLine();
             }
-            biblioteca.gravarTodos();
+            
         }
     }
 }
