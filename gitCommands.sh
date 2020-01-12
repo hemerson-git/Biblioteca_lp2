@@ -21,6 +21,7 @@ echo "Branch: master"
 
 #faz o merge com a brach hemerson e faz o push
 git merge hemerson
+git push
 
 #muda de volta para a branch hemerson
 git checkout hemerson
