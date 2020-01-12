@@ -128,7 +128,6 @@ public class Emprestimo implements Serializable{
             dados += "Data de devolução: " + dataFormatadaDevolucao + "\n";
         }
         return dados;
-        
     }
 
 }
