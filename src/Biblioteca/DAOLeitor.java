@@ -19,7 +19,7 @@ public class DAOLeitor {
 
     public List<Leitor> obterTodos() {
         List<Leitor> listaLeitor = null;
-        try (FileInputStream fis = new FileInputStream("./files/leitores.fos")) {
+        try (FileInputStream fis = new FileInputStream("./src/BD/BD_Leitores.txt")) {
             try (ObjectInputStream ois = new ObjectInputStream(fis)) {
                 return listaLeitor = (List<Leitor>) ois.readObject();
             }
@@ -31,7 +31,7 @@ public class DAOLeitor {
     public void gravarTodos(List<Leitor> leitores) throws IOException {
         //Ler todos os leitors da lista leitores e gravar em arquivo
         criarArquivo();
-        try (FileOutputStream fos = new FileOutputStream("./files/leitores.fos")) {
+        try (FileOutputStream fos = new FileOutputStream("./src/BD/BD_Leitores.txt")) {
             try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                 oos.writeObject(leitores);
             }
@@ -63,10 +63,10 @@ public class DAOLeitor {
 
     public boolean criarArquivo() {
         boolean flag = true;
-        Path path = Paths.get("./files/leitores.fos");
+        Path path = Paths.get("./src/BD/BD_Leitores.txt");
         if (!Files.exists(path)) {
             try {
-                Path path2 = Paths.get("./files");
+                Path path2 = Paths.get("./src/BD");
                 if (!Files.exists(path2)) {
                     Files.createDirectory(path2);
                 }

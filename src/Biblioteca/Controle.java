@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,6 +24,7 @@ public class Controle {
     private List<Leitor> leitores = new ArrayList<>();
     private List<Emprestimo> emprestimos = new ArrayList<>();
     private List<Livro> livros = new ArrayList<>();
+  
 
     public Controle() {
         //instancia os dados
@@ -30,7 +32,7 @@ public class Controle {
         carregarTodos();
     }
 
-    public void criarEmprestimo(String nomeleitor, String tituloLivro) {
+    public void criarEmprestimo(String nomeleitor, String tituloLivro) throws IOException {
         Livro livroSelecionado = null;
         Leitor leitorSelecionado = null;
         int idEmprestimo = emprestimos.size() + 1;
@@ -83,18 +85,21 @@ public class Controle {
             emprestimos.add(emprestimo);
             livroSelecionado.setStatus(1);
             livroSelecionado.setNumeroExemplar(livroSelecionado.getNumeroExemplar() - 1);
-            System.out.println("Empréstimo realizado com sucesso! ");
         } else if (leitorSelecionado == null) {
             System.out.println("O leitor selecionado não está cadastrado");
         } else {
             livroSelecionado.setStatus(0);
             System.out.println("Livro não disponível");
         }
+        daoEmprestimo.criarArquivo();
+        daoEmprestimo.gravarTodos(emprestimos);
+        System.out.println("Empréstimo realizado com sucesso! ");
     }
 
     public void imprimirEmprestimoNome(String nomeLeitor) {
         for (Emprestimo emprestimo : emprestimos) {
             if (emprestimo.getLeitor().getNome().equals(nomeLeitor)) {
+                System.out.println("============Empréstimos===========");
                 System.out.println(emprestimo.toString());
             }
         }
@@ -128,9 +133,9 @@ public class Controle {
 
     public void imprimirTodos() {
         for (Emprestimo emprestimo : emprestimos) {
-            System.out.println("\n***********************************************");
+            System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++");
             System.out.println(emprestimo.toString());
-            System.out.println("***********************************************\n");
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++\n");
         }
     }
 
@@ -149,7 +154,7 @@ public class Controle {
         }
     }
 
-    public void cadastrarLeitor(String nomeLeitor, int tipoLeitor) {
+    public void cadastrarLeitor(String nomeLeitor, int tipoLeitor) throws IOException {
         TipoLeitor tipo = null;
         switch (tipoLeitor) {
             case 1:
@@ -168,14 +173,19 @@ public class Controle {
 
         Leitor leitor = new Leitor(nomeLeitor, id, tipo);
         leitores.add(leitor);
-        System.out.println("Leitor cadastrado com sucesso! ");
         System.out.println(leitores.indexOf(leitor));
+        daoLeitor.criarArquivo();
+        daoLeitor.gravarTodos(leitores);
+        
+        System.out.println("Leitor cadastrado com sucesso! ");
     }
 
-    public void cadastrarLivro(String titulo, String autor, int status, int numeroExemplar) {
+    public void cadastrarLivro(String titulo, String autor, int status, int numeroExemplar) throws IOException {
         int codigoLivro = livros.size() + 1;
         Livro livro = new Livro(numeroExemplar, codigoLivro, titulo, autor);
         livros.add(livro);
+        daoLivro.criarArquivo();
+        daoLivro.gravarTodos(livros);
         System.out.println("Cadastro realizado com sucesso");
     }
 
@@ -233,10 +243,28 @@ public class Controle {
     
     public void imprimirTodosLivros() {
         for (Livro livro : livros) {
+            System.out.println("----------Livros-------------");
             System.out.println(livro.getTitulo());
         }
     }
+    public DefaultTableModel imprimirTodosLivrosInterface() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        
+        for (Livro livro : livros) {
+             modelo.addRow(new Object[]{livro.getCodigo(), livro.getTitulo(), livro.getAutor(), livro.getStatus(), livro.getNumeroExemplar()});
+        }
+        return modelo;
+    }
 
+     public void imprimirTodosLeitores() {
+        
+        for (Leitor leitor : leitores) {
+            System.out.println("**********Leitores***********");
+            System.out.println(leitor.getNome());
+           
+         }
+    }
+     
     public void carregarTodos() {
         if (daoEmprestimo.obterTodos() != null) {
             emprestimos = daoEmprestimo.obterTodos();

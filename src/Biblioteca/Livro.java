@@ -25,6 +25,8 @@ private String autor;
         this.autor = autor;
     }
      
+     public Livro(){
+     }
     /**
      * @return the numeroExemplar
      */

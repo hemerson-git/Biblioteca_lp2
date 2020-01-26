@@ -30,7 +30,7 @@ public class DAOEmprestimo {
     public List<Emprestimo> obterTodos() {
         //Retorna uma lista com todos os emprestimos    
         List<Emprestimo> listaEmprestimos = null;
-        try (FileInputStream fis = new FileInputStream("./files/emprestimos.fos")) {
+        try (FileInputStream fis = new FileInputStream("./src/BD/BD_Emprestimo.txt")) {
             try (ObjectInputStream ois = new ObjectInputStream(fis)) {
                 return listaEmprestimos = (List<Emprestimo>) ois.readObject();
             }
@@ -42,7 +42,7 @@ public class DAOEmprestimo {
     public void gravarTodos(List<Emprestimo> emprestimo) throws IOException {
         //Grava a lista de emprestimos em uma arquivo
         criarArquivo();
-        try (FileOutputStream fos = new FileOutputStream("./files/emprestimos.fos")) {
+        try (FileOutputStream fos = new FileOutputStream("./src/BD/BD_Emprestimo.txt")) {
             try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                 oos.writeObject(emprestimo);
             }
@@ -79,10 +79,10 @@ public class DAOEmprestimo {
 
     public boolean criarArquivo() {
         boolean flag = true;
-        Path path = Paths.get("./files/emprestimos.fos");
+        Path path = Paths.get("./src/BD/BD_Emprestimo.txt");
         if (!Files.exists(path)) {
             try {
-                Path path2 = Paths.get("./files");
+                Path path2 = Paths.get("./src/BD");
                 if (!Files.exists(path2)) {
                     Files.createDirectory(path2);
                 }

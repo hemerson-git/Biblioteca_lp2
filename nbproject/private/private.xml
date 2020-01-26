@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/hemerson/NetBeansProjects/Biblioteca_lp2/src/Biblioteca/Controle.java</file>
-            <file>file:/home/hemerson/NetBeansProjects/Biblioteca_lp2/src/Biblioteca/Emprestimo.java</file>
-            <file>file:/home/hemerson/NetBeansProjects/Biblioteca_lp2/src/Biblioteca/Main.java</file>
-            <file>file:/home/hemerson/NetBeansProjects/Biblioteca_lp2/src/Biblioteca/DAOEmprestimo.java</file>
+            <file>file:/C:/Users/giova/OneDrive/Área%20de%20Trabalho/Biblioteca_lp2%20-%203ª%20Unidade/Biblioteca_lp2/src/Biblioteca/JImagePanel.java</file>
+            <file>file:/C:/Users/giova/OneDrive/Área%20de%20Trabalho/Biblioteca_lp2%20-%203ª%20Unidade/Biblioteca_lp2/src/Biblioteca/TelaCadastroLivro.java</file>
+            <file>file:/C:/Users/giova/OneDrive/Área%20de%20Trabalho/Biblioteca_lp2%20-%203ª%20Unidade/Biblioteca_lp2/src/Biblioteca/TelaCadastroEmprestimo.java</file>
+            <file>file:/C:/Users/giova/OneDrive/Área%20de%20Trabalho/Biblioteca_lp2%20-%203ª%20Unidade/Biblioteca_lp2/src/Biblioteca/TelaPrincipal.java</file>
+            <file>file:/C:/Users/giova/OneDrive/Área%20de%20Trabalho/Biblioteca_lp2%20-%203ª%20Unidade/Biblioteca_lp2/src/Biblioteca/TelaCadastroLeitor.java</file>
         </group>
     </open-files>
 </project-private>

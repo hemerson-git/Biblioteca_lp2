@@ -23,7 +23,10 @@ public class Emprestimo implements Serializable{
         this.leitor = leitor;
         this.livro = livro;
     }
-
+    
+    public Emprestimo (){
+    
+    }
     /**
      * @return the id
      */

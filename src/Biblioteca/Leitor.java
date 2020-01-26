@@ -17,6 +17,9 @@ public class Leitor implements Serializable{
         this.tipoLeitor = tipoLeitor;
     }
     
+    public Leitor(){
+    }
+    
     public String getNome() {
         return nome;
     }
