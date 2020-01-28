@@ -9,6 +9,8 @@ import static Biblioteca.TelaPrincipal.tema;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -50,8 +52,6 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
         botaoExcluir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaLivro = new javax.swing.JTable();
-        jLabel6 = new javax.swing.JLabel();
-        checkboxDisponivel = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -79,35 +79,29 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
         });
 
         botaoExcluir.setText("Excluir");
+        botaoExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoExcluirActionPerformed(evt);
+            }
+        });
 
         tabelaLivro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Código", "Titulo", "Autor", "Disponivel", "Nº  Exemplares"
+                "Código", "Titulo", "Autor", "Nº  Exemplares"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
-            };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jScrollPane1.setViewportView(tabelaLivro);
-
-        jLabel6.setText("Status:");
-
-        checkboxDisponivel.setText("Disponível");
 
         javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
         imagePanel.setLayout(imagePanelLayout);
@@ -133,16 +127,9 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
                                     .addComponent(campoTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(campoCodigoLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(imagePanelLayout.createSequentialGroup()
-                                .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(18, 18, 18))
-                                    .addGroup(imagePanelLayout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(64, 64, 64)))
-                                .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(campoNExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(checkboxDisponivel))))
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(campoNExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 18, Short.MAX_VALUE)
                         .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(botaoCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -175,17 +162,9 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
                 .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(campoNExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(imagePanelLayout.createSequentialGroup()
-                        .addGap(0, 47, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16))
-                    .addGroup(imagePanelLayout.createSequentialGroup()
-                        .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(checkboxDisponivel)
-                            .addComponent(jLabel6))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(0, 23, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -209,28 +188,26 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
             File fileImg1 = new File(tema);
             BufferedImage img1 = ImageIO.read(fileImg1);
             imagePanel.updateBackground(img1);
-        } catch (IOException ex) {
+            } catch (IOException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
-                
-               controle.imprimirTodosLivrosInterface();
+               List <Livro> livro = controle.imprimirTodosLivrosInterface();
+               for (Livro livro1 : livro) {
+                   int codigo = livro1.getCodigo();
+                   String titulo = livro1.getTitulo();
+                   String autor = livro1.getAutor();
+                   int nExemplar = livro1.getNumeroExemplar();
+                   modelo.addRow(new Object[]{codigo, titulo, autor, nExemplar}); 
+                }
      
        
     }//GEN-LAST:event_formWindowOpened
 
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
        DefaultTableModel modelo = (DefaultTableModel)tabelaLivro.getModel();
-
+       
         try {
             
-            
-            if(checkboxDisponivel.isSelected()){
-                status = 1;
-                disponivel = true;
-            } else{
-                status = 0;
-                disponivel = false;
-            }
             controle.cadastrarLivro(campoTitulo.getText(), campoAutor.getText(), status, Integer.parseInt(campoNExemplar.getText()));
         } catch (IOException ex) {
             Logger.getLogger(TelaCadastroLivro.class.getName()).log(Level.SEVERE, null, ex);
@@ -242,7 +219,6 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
             campoCodigoLivro.setText("");
             campoAutor.setText("");
             campoNExemplar.setText("");
-            checkboxDisponivel.setSelected(false);
             campoTitulo.setText("");
         
 //        else if (evt.getSource()==btExcluir){
@@ -252,6 +228,17 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
 //            modelo.removeRow(tabelaLivro.getSelectedRow());
 //        }
     }//GEN-LAST:event_botaoCadastrarActionPerformed
+
+    private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
+
+    String livro = tabelaLivro.getValueAt(tabelaLivro.getSelectedRow(), 
+                                          tabelaLivro.getSelectedColumn()).toString();
+    controle.excluirLivro(livro);
+//             
+//    Remove da tabela (na interface gráfica):
+//    modelo.removeRow(tabelaLivro.getSelectedRow()); 
+      // } 
+    }//GEN-LAST:event_botaoExcluirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -297,14 +284,12 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
     private javax.swing.JTextField campoCodigoLivro;
     private javax.swing.JTextField campoNExemplar;
     private javax.swing.JTextField campoTitulo;
-    private javax.swing.JCheckBox checkboxDisponivel;
     private Biblioteca.JImagePanel imagePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabelaLivro;
     // End of variables declaration//GEN-END:variables

@@ -247,13 +247,23 @@ public class Controle {
             System.out.println(livro.getTitulo());
         }
     }
-    public DefaultTableModel imprimirTodosLivrosInterface() {
-        DefaultTableModel modelo = new DefaultTableModel();
-        
+    
+    public void getAllLivros() {
         for (Livro livro : livros) {
-             modelo.addRow(new Object[]{livro.getCodigo(), livro.getTitulo(), livro.getAutor(), livro.getStatus(), livro.getNumeroExemplar()});
+           
         }
-        return modelo;
+    }
+//    public DefaultTableModel imprimirTodosLivrosInterface() {
+//        DefaultTableModel modelo = new DefaultTableModel();
+//        
+//        for (Livro livro : livros) {
+//             modelo.addRow(new Object[]{livro.getCodigo(), livro.getTitulo(), livro.getAutor(), livro.getStatus(), livro.getNumeroExemplar()});
+//        }
+//        return modelo;
+//    }
+    
+    public List<Livro> imprimirTodosLivrosInterface(){
+        return livros;
     }
 
      public void imprimirTodosLeitores() {
