@@ -24,7 +24,6 @@ public class Controle {
     private List<Leitor> leitores = new ArrayList<>();
     private List<Emprestimo> emprestimos = new ArrayList<>();
     private List<Livro> livros = new ArrayList<>();
-  
 
     public Controle() {
         //instancia os dados
@@ -32,7 +31,7 @@ public class Controle {
         carregarTodos();
     }
 
-    public void criarEmprestimo(String nomeleitor, String tituloLivro) throws IOException {
+    public short criarEmprestimo(String nomeleitor, String tituloLivro) throws IOException {
         Livro livroSelecionado = null;
         Leitor leitorSelecionado = null;
         int idEmprestimo = emprestimos.size() + 1;
@@ -83,17 +82,26 @@ public class Controle {
         if (leitorSelecionado != null && livroSelecionado != null && livroSelecionado.getNumeroExemplar() > 0) {
             Emprestimo emprestimo = new Emprestimo(idEmprestimo, dataEmprestimo, dataDevolucao, dataPrevisaoDevolucao, leitorSelecionado, livroSelecionado);
             emprestimos.add(emprestimo);
-            livroSelecionado.setStatus(1);
             livroSelecionado.setNumeroExemplar(livroSelecionado.getNumeroExemplar() - 1);
-        } else if (leitorSelecionado == null) {
-            System.out.println("O leitor selecionado não está cadastrado");
-        } else {
-            livroSelecionado.setStatus(0);
+            if (livroSelecionado.getNumeroExemplar() > 1) {
+                livroSelecionado.setStatus(1);
+            } else {
+                livroSelecionado.setStatus(0);
+            }
+        } else if (livroSelecionado == null) {
+            System.out.println("O Livro não está cadastrado no sistema");
+            return 3;
+        } else if (livroSelecionado.getNumeroExemplar() == 0) {
             System.out.println("Livro não disponível");
+            return 1;
+        } else {
+            System.out.println("O leitor selecionado não está cadastrado");
+            return 2;
         }
         daoEmprestimo.criarArquivo();
         daoEmprestimo.gravarTodos(emprestimos);
         System.out.println("Empréstimo realizado com sucesso! ");
+        return 4;
     }
 
     public void imprimirEmprestimoNome(String nomeLeitor) {
@@ -111,14 +119,14 @@ public class Controle {
                 switch (operacao) {
                     case 1:
                         for (Livro livro : livros) {
-                            if(livro.getTitulo().equals(valor)) {
+                            if (livro.getTitulo().equals(valor)) {
                                 emprestimo.setLivro(livro);
                             }
                         }
                         break;
                     case 2:
                         for (Leitor leitor : leitores) {
-                            if(leitor.getNome().equals(valor)) {
+                            if (leitor.getNome().equals(valor)) {
                                 emprestimo.setLeitor(leitor);
                             }
                         }
@@ -139,17 +147,37 @@ public class Controle {
         }
     }
 
+    public List<Emprestimo> imprimirTodosInterface() {
+        return emprestimos;
+    }
+
     public void devolverLivro(int idEmprestimo) {
         //tornar o livro não emprestado e alterar a data de devolução
         for (Emprestimo emprestimo : emprestimos) {
             //Vefica se exite um livro com o ID passado e se esse livro ainda não foi devolvido
             //caso seja atendidas, aumenta o número de exemplares disponíveis, e configura a data de entrega para
             //a data atual do sistema.
-            
+
             if (emprestimo.getId() == idEmprestimo && emprestimo.getDataDevolucao() == null) {
                 emprestimo.getLivro().setNumeroExemplar(emprestimo.getLivro().getNumeroExemplar() + 1);
                 Date data = new Date();
                 emprestimo.setDataDevolucao(data);
+                System.out.println("Livro devolvido");
+            }
+        }
+    }
+
+    public void excluirEmprestimo(int idEmprestimo) {
+        //tornar o livro não emprestado e alterar a data de devolução
+        for (Emprestimo emprestimo : emprestimos) {
+            //Vefica se exite um livro com o ID passado e se esse livro ainda não foi devolvido
+            //caso seja atendidas, aumenta o número de exemplares disponíveis, e configura a data de entrega para
+            //a data atual do sistema.
+
+            if (emprestimo.getId() == idEmprestimo) {
+                emprestimos.remove(emprestimo);
+                System.out.println("Empréstimo removido do sistema");
+                break;
             }
         }
     }
@@ -176,17 +204,22 @@ public class Controle {
         System.out.println(leitores.indexOf(leitor));
         daoLeitor.criarArquivo();
         daoLeitor.gravarTodos(leitores);
-        
+
         System.out.println("Leitor cadastrado com sucesso! ");
     }
 
-    public void cadastrarLivro(String titulo, String autor, int status, int numeroExemplar) throws IOException {
-        int codigoLivro = livros.size() + 1;
-        Livro livro = new Livro(numeroExemplar, codigoLivro, titulo, autor);
-        livros.add(livro);
-        daoLivro.criarArquivo();
-        daoLivro.gravarTodos(livros);
-        System.out.println("Cadastro realizado com sucesso");
+    public boolean cadastrarLivro(String titulo, String autor, int codigoLivro, int numeroExemplar) throws IOException {
+        for (Livro livro : livros) {
+            if (!(livro.getCodigo() == codigoLivro)) {
+                Livro novoLivro = new Livro(numeroExemplar, codigoLivro, titulo, autor);
+                livros.add(novoLivro);
+                daoLivro.criarArquivo();
+                daoLivro.gravarTodos(livros);
+                System.out.println("Cadastro realizado com sucesso");
+                return true;
+            }
+        }
+        return false;
     }
 
     public void excluirLivro(String nomeLivro) {
@@ -240,41 +273,31 @@ public class Controle {
             }
         }
     }
-    
+
     public void imprimirTodosLivros() {
         for (Livro livro : livros) {
             System.out.println("----------Livros-------------");
             System.out.println(livro.getTitulo());
         }
     }
-    
-    public void getAllLivros() {
-        for (Livro livro : livros) {
-           
-        }
-    }
-//    public DefaultTableModel imprimirTodosLivrosInterface() {
-//        DefaultTableModel modelo = new DefaultTableModel();
-//        
-//        for (Livro livro : livros) {
-//             modelo.addRow(new Object[]{livro.getCodigo(), livro.getTitulo(), livro.getAutor(), livro.getStatus(), livro.getNumeroExemplar()});
-//        }
-//        return modelo;
-//    }
-    
-    public List<Livro> imprimirTodosLivrosInterface(){
+
+    public List<Livro> imprimirTodosLivrosInterface() {
         return livros;
     }
 
-     public void imprimirTodosLeitores() {
-        
+    public void imprimirTodosLeitores() {
+
         for (Leitor leitor : leitores) {
             System.out.println("**********Leitores***********");
             System.out.println(leitor.getNome());
-           
-         }
+
+        }
     }
-     
+
+    public List<Leitor> imprimirTodosLeitorInterface() {
+        return leitores;
+    }
+
     public void carregarTodos() {
         if (daoEmprestimo.obterTodos() != null) {
             emprestimos = daoEmprestimo.obterTodos();

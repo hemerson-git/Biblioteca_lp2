@@ -1,9 +1,9 @@
-git checkout giovane
+git checkout hemerson
 clear
-echo "Branch: giovane"
+echo "Branch: hemerson"
 
 #pede a mensagem de commit ao usuário
-echo "Teste script giovane"
+echo "Teste script hemerson"
 read msg
 
 #adiciona todos os arquivos ao stagging
@@ -19,12 +19,12 @@ clear
 git checkout master
 echo "Branch: master"
 
-#faz o merge com a brach giovane e faz o push
-git merge giovane
+#faz o merge com a brach hemerson e faz o push
+git merge hemerson
 git push
 
 #muda de volta para a branch hemerson
-git checkout giovane
-echo "Branch: giovane"
+git checkout hemerson
+echo "Branch: hemerson"
 
 $shell

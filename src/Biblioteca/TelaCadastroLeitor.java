@@ -9,6 +9,7 @@ import static Biblioteca.TelaPrincipal.tema;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -75,6 +76,11 @@ public class TelaCadastroLeitor extends javax.swing.JFrame {
         });
 
         botaoExcluir.setText("Excluir");
+        botaoExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoExcluirActionPerformed(evt);
+            }
+        });
 
         tabelaLeitor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -253,14 +259,26 @@ public class TelaCadastroLeitor extends javax.swing.JFrame {
     }//GEN-LAST:event_radioProfessorActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-       try {
+       DefaultTableModel modelo = (DefaultTableModel)tabelaLeitor.getModel(); 
+        try {
             File fileImg1 = new File(tema);
             BufferedImage img1 = ImageIO.read(fileImg1);
             imagePanel.updateBackground(img1);
         } catch (IOException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
+        List<Leitor> leitor = controle.imprimirTodosLeitorInterface();
+        for (Leitor leitor1 : leitor) {
+            int id = leitor1.getIdLeitor();
+            String nome = leitor1.getNome();
+            String tipo = leitor1.getTipoLeitor().name();
+            modelo.addRow(new Object[]{id, nome, tipo}); 
+ }
     }//GEN-LAST:event_formWindowOpened
+
+    private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botaoExcluirActionPerformed
 
     /**
      * @param args the command line arguments

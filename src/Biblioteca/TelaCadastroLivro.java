@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
  * @author giova
  */
 public class TelaCadastroLivro extends javax.swing.JFrame {
+
     /**
      * Creates new form TelaCadastroLivro
      */
@@ -183,61 +184,79 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        DefaultTableModel modelo = (DefaultTableModel)tabelaLivro.getModel();              
+        renderizaTabela();
         try {
             File fileImg1 = new File(tema);
             BufferedImage img1 = ImageIO.read(fileImg1);
             imagePanel.updateBackground(img1);
-            } catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-               List <Livro> livro = controle.imprimirTodosLivrosInterface();
-               for (Livro livro1 : livro) {
-                   int codigo = livro1.getCodigo();
-                   String titulo = livro1.getTitulo();
-                   String autor = livro1.getAutor();
-                   int nExemplar = livro1.getNumeroExemplar();
-                   modelo.addRow(new Object[]{codigo, titulo, autor, nExemplar}); 
-                }
-     
-       
+        }
     }//GEN-LAST:event_formWindowOpened
 
+    private void renderizaTabela() {
+        modelo = (DefaultTableModel) tabelaLivro.getModel();
+        modelo.setRowCount(0);
+        livro = controle.imprimirTodosLivrosInterface();
+        for (Livro livro1 : livro) {
+            int codigo = livro1.getCodigo();
+            String titulo = livro1.getTitulo();
+            String autor = livro1.getAutor();
+            int nExemplar = livro1.getNumeroExemplar();
+            modelo.addRow(new Object[]{codigo, titulo, autor, nExemplar});
+        }
+    }
+
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
-       DefaultTableModel modelo = (DefaultTableModel)tabelaLivro.getModel();
-       
+        modelo = (DefaultTableModel) tabelaLivro.getModel();
+
         try {
-            
-            controle.cadastrarLivro(campoTitulo.getText(), campoAutor.getText(), status, Integer.parseInt(campoNExemplar.getText()));
+            String title = campoTitulo.getText();
+            String author = campoAutor.getText();
+            String code = campoCodigoLivro.getText();
+            String numExemplar = campoNExemplar.getText();
+
+            if (!title.isEmpty() && !author.isEmpty() && !code.isEmpty() && !numExemplar.isEmpty()) {
+                int nExem = 0;
+                try {
+                    nExem = Integer.parseInt(numExemplar);
+                    if (!controle.cadastrarLivro(title, author, Integer.parseInt(code), nExem)) {
+                        JOptionPane.showMessageDialog(this, "Código já existente", "Erro", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        //Adiciona na tabela (na interface gráfica):
+//                      modelo.addRow(new Object[]{code, title, author, numExemplar});
+                        campoCodigoLivro.setText("");
+                        campoAutor.setText("");
+                        campoNExemplar.setText("");
+                        campoTitulo.setText("");
+                        controle.gravarTodos();
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "O código deve ser numérico", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (IOException ex) {
             Logger.getLogger(TelaCadastroLivro.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Erro ao gravar o livro", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
-            //Adiciona na tabela (na interface gráfica):
-       
-        modelo.addRow(new Object[]{campoCodigoLivro.getText(),campoTitulo.getText(),campoAutor.getText(),disponivel,campoNExemplar.getText()});
-            campoCodigoLivro.setText("");
-            campoAutor.setText("");
-            campoNExemplar.setText("");
-            campoTitulo.setText("");
-        
-//        else if (evt.getSource()==btExcluir){
-//            controle.excluirQuarto(tabelaLivro.getSelectedRow());
-//            
-//            //Remove da tabela (na interface gráfica):
-//            modelo.removeRow(tabelaLivro.getSelectedRow());
-//        }
     }//GEN-LAST:event_botaoCadastrarActionPerformed
 
     private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
 
-    String livro = tabelaLivro.getValueAt(tabelaLivro.getSelectedRow(), 
-                                          tabelaLivro.getSelectedColumn()).toString();
-    controle.excluirLivro(livro);
-//             
-//    Remove da tabela (na interface gráfica):
-//    modelo.removeRow(tabelaLivro.getSelectedRow()); 
-      // } 
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o livro? ") == 0) {
+            //Pega o título do livro
+            String tituloLivro = tabelaLivro.getValueAt(tabelaLivro.getSelectedRow(), 1).toString();
+            //chama o método de exclusão do controller
+            controle.excluirLivro(tituloLivro);
+
+            //chama o método de gravação do controller para atulaizar o BD
+            controle.gravarTodos();
+            modelo.removeRow(tabelaLivro.getSelectedRow());
+
+        }
     }//GEN-LAST:event_botaoExcluirActionPerformed
 
     /**
@@ -274,9 +293,12 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
             }
         });
     }
-     Controle controle = new Controle();
-     boolean disponivel = false;
-     int status = 0;
+
+    private List<Livro> livro;
+    private DefaultTableModel modelo;
+    Controle controle = new Controle();
+    boolean disponivel = false;
+    int status = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoCadastrar;
     private javax.swing.JButton botaoExcluir;
