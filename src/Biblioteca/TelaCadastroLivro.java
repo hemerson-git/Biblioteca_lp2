@@ -220,7 +220,7 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
                 int nExem = 0;
                 try {
                     nExem = Integer.parseInt(numExemplar);
-                    if (!controle.cadastrarLivro(title, author, Integer.parseInt(code), nExem)) {
+                    if (controle.cadastrarLivro(title, author, Integer.parseInt(code), nExem) == false) {
                         JOptionPane.showMessageDialog(this, "Código já existente", "Erro", JOptionPane.ERROR_MESSAGE);
                     } else {
                         //Adiciona na tabela (na interface gráfica):

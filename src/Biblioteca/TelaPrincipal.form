@@ -13,7 +13,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="cadastrarLivro">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cadastar Livro"/>
+                <Property name="text" type="java.lang.String" value="Cadastro e remo&#xe7;&#xe3;o de Livro"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cadastrarLivroActionPerformed"/>
@@ -31,7 +31,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuLeitor">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cadastar Leitor"/>
+                <Property name="text" type="java.lang.String" value="Cadastro e remo&#xe7;&#xe3;o de Leitor"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuLeitorActionPerformed"/>
@@ -46,7 +46,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Realizar Emprestimo"/>
+                <Property name="text" type="java.lang.String" value="Vizualizar emprestimos"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>

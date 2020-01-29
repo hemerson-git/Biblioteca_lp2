@@ -209,17 +209,23 @@ public class Controle {
     }
 
     public boolean cadastrarLivro(String titulo, String autor, int codigoLivro, int numeroExemplar) throws IOException {
+        boolean resultado = false;
         for (Livro livro : livros) {
-            if (!(livro.getCodigo() == codigoLivro)) {
-                Livro novoLivro = new Livro(numeroExemplar, codigoLivro, titulo, autor);
-                livros.add(novoLivro);
-                daoLivro.criarArquivo();
-                daoLivro.gravarTodos(livros);
-                System.out.println("Cadastro realizado com sucesso");
-                return true;
+            if (livro.getCodigo() != codigoLivro) {
+                resultado = true;
+            } else {
+                resultado = false;
+                break;
             }
         }
-        return false;
+        if (resultado == true) {
+            Livro novoLivro = new Livro(numeroExemplar, codigoLivro, titulo, autor);
+            livros.add(novoLivro);
+            daoLivro.criarArquivo();
+            daoLivro.gravarTodos(livros);
+            System.out.println("Cadastro realizado com sucesso");
+        }
+        return resultado;
     }
 
     public void excluirLivro(String nomeLivro) {

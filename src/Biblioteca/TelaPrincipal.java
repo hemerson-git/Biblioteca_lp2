@@ -80,7 +80,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         menuLivro.setText("Livro");
 
-        cadastrarLivro.setText("Cadastar Livro");
+        cadastrarLivro.setText("Cadastro e remoção de Livro");
         cadastrarLivro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cadastrarLivroActionPerformed(evt);
@@ -97,7 +97,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        menuLeitor.setText("Cadastar Leitor");
+        menuLeitor.setText("Cadastro e remoção de Leitor");
         menuLeitor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuLeitorActionPerformed(evt);
@@ -109,7 +109,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         menuEmprestimo.setText("Emprestimo");
 
-        jMenuItem3.setText("Realizar Emprestimo");
+        jMenuItem3.setText("Vizualizar emprestimos");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
