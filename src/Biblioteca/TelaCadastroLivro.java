@@ -230,9 +230,10 @@ public class TelaCadastroLivro extends javax.swing.JFrame {
                         campoNExemplar.setText("");
                         campoTitulo.setText("");
                         controle.gravarTodos();
+                        renderizaTabela();
                     }
                 } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "O código deve ser numérico", "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "O código e nº de exemplares devem ser numéricos", "Erro", JOptionPane.ERROR_MESSAGE);
                 }
 
             } else {
