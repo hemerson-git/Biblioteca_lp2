@@ -5,11 +5,14 @@
  */
 package Biblioteca;
 
+import java.awt.Component;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,10 +34,15 @@ public class Controle {
         carregarTodos();
     }
 
+    private int getId() {
+        int lastId = emprestimos.get(emprestimos.size() - 1).getId();
+        return lastId + 1;
+    }
+    
     public short criarEmprestimo(String nomeleitor, String tituloLivro) throws IOException {
         Livro livroSelecionado = null;
         Leitor leitorSelecionado = null;
-        int idEmprestimo = emprestimos.size() + 1;
+        int idEmprestimo = getId();
 
 //      *************************** LIVRO *********************
         for (Livro livro : livros) {
@@ -139,6 +147,43 @@ public class Controle {
         }
     }
 
+    public short alterarEmprestimoGUI(int idEmprestimo, String novoLivro, String novoLeitor) {
+        short resultadoOperacao = 0;
+        if (novoLivro.trim().isEmpty() == false && novoLeitor.trim().isEmpty() == false) {
+            for (Emprestimo emprestimo : emprestimos) {
+                if (emprestimo.getId() == idEmprestimo) {
+                    for (Livro livro : livros) {
+                        if (livro.getTitulo().equals(novoLivro)) {
+                            emprestimo.setLivro(livro);
+                            resultadoOperacao = 0;
+                            break;
+                        } else {
+                            resultadoOperacao = 1;
+                        }
+                    }
+                    
+                    if(resultadoOperacao == 1){
+                        return resultadoOperacao;
+                    }
+
+                    for (Leitor leitor : leitores) {
+                        if (leitor.getNome().equals(novoLeitor)) {
+                            emprestimo.setLeitor(leitor);
+                            resultadoOperacao = 0;
+                            break;
+                        } else {
+                            resultadoOperacao = 2;
+                        }
+                    }
+                }
+            }
+        } else {
+            resultadoOperacao = 3;
+        }
+        System.out.println(resultadoOperacao);
+        return resultadoOperacao;
+    }
+
     public void imprimirTodos() {
         for (Emprestimo emprestimo : emprestimos) {
             System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++++");
@@ -147,24 +192,53 @@ public class Controle {
         }
     }
 
-    public List<Emprestimo> imprimirTodosInterface() {
+    public void imprimirTodosGUI(DefaultTableModel modelo) {
+        for (Emprestimo emprestimo : emprestimos) {
+            int idEmprestimo = emprestimo.getId();
+            String leitor = emprestimo.getLeitor().getNome();
+            int codLivro = emprestimo.getLivro().getCodigo();
+            String titulo = emprestimo.getLivro().getTitulo();
+            String autor = emprestimo.getLivro().getAutor();
+            int status = emprestimo.getLivro().getStatus();
+            Date dtEmprestimo = emprestimo.getDataEmprestimo();
+            Date prEntrega = emprestimo.getDataPrevisaoDevolucao();
+            Date dtEntrega = emprestimo.getDataDevolucao();
+            String dataFormatadaDevolucao = null;
+
+            //Formatção da data no padrão br
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String dataFormatadaEmprestimo = dateFormat.format(dtEmprestimo);
+            String dataFormatadaPrevisao = dateFormat.format(prEntrega);
+            if (dtEntrega != null) {
+                dataFormatadaDevolucao = dateFormat.format(dtEntrega);
+            }
+
+            modelo.addRow(new Object[]{idEmprestimo, leitor, codLivro, titulo, autor,
+                status, dataFormatadaEmprestimo, dataFormatadaPrevisao, dataFormatadaDevolucao});
+        }
+    }
+
+    public List<Emprestimo> getEmprestimos() {
         return emprestimos;
     }
 
-    public void devolverLivro(int idEmprestimo) {
+    public boolean devolverLivro(int idEmprestimo) {
         //tornar o livro não emprestado e alterar a data de devolução
         for (Emprestimo emprestimo : emprestimos) {
-            //Vefica se exite um livro com o ID passado e se esse livro ainda não foi devolvido
+            //Vefica se exite um livro com o ID passado e se esse livro ainda não foi devolvido 
             //caso seja atendidas, aumenta o número de exemplares disponíveis, e configura a data de entrega para
-            //a data atual do sistema.
+            //a data atual do sistema e retorna true.
 
             if (emprestimo.getId() == idEmprestimo && emprestimo.getDataDevolucao() == null) {
                 emprestimo.getLivro().setNumeroExemplar(emprestimo.getLivro().getNumeroExemplar() + 1);
                 Date data = new Date();
                 emprestimo.setDataDevolucao(data);
                 System.out.println("Livro devolvido");
+                return true;
             }
         }
+
+        return false;
     }
 
     public void excluirEmprestimo(int idEmprestimo) {
@@ -206,6 +280,33 @@ public class Controle {
         daoLeitor.gravarTodos(leitores);
 
         System.out.println("Leitor cadastrado com sucesso! ");
+    }
+
+    public boolean cadastrarEmprestimoGUI(Component cmpnt, String nomeEmp, String tituloEmp) {
+        if (nomeEmp.trim().isEmpty() == false && nomeEmp != null && tituloEmp.trim().isEmpty() == false && tituloEmp != null) {
+            try {
+                int retornoCadastro = criarEmprestimo(nomeEmp, tituloEmp);
+                switch (retornoCadastro) {
+                    case 1:
+                        JOptionPane.showMessageDialog(cmpnt, "Livro indisponível no momento", "Erro", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    case 2:
+                        JOptionPane.showMessageDialog(cmpnt, "Leitor não cadastrado", "Erro", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    case 3:
+                        JOptionPane.showMessageDialog(cmpnt, "Livro não cadastrado no sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    case 4:
+                        gravarTodos();
+                        return true;
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(cmpnt, "Erro ao realizar cadastrado", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(cmpnt, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
     }
 
     public boolean cadastrarLivro(String titulo, String autor, int codigoLivro, int numeroExemplar) throws IOException {

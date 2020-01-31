@@ -9,9 +9,6 @@ import static Biblioteca.TelaPrincipal.tema;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -143,6 +140,11 @@ public class TelaCadastroEmprestimo extends javax.swing.JFrame {
         btnCancelar.setMaximumSize(new java.awt.Dimension(90, 32));
         btnCancelar.setMinimumSize(new java.awt.Dimension(90, 32));
         btnCancelar.setPreferredSize(new java.awt.Dimension(90, 32));
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         jLabel4.setMaximumSize(new java.awt.Dimension(90, 20));
         jLabel4.setMinimumSize(new java.awt.Dimension(90, 20));
@@ -232,7 +234,7 @@ public class TelaCadastroEmprestimo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        rederizaTabela();
+        renderizaTabela();
         try {
             File fileImg1 = new File(tema);
             BufferedImage img1 = ImageIO.read(fileImg1);
@@ -243,111 +245,105 @@ public class TelaCadastroEmprestimo extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formWindowOpened
 
-    private void rederizaTabela() {
+    private void renderizaTabela() {
         modelo = (DefaultTableModel) tabelaEmprestimo.getModel();
         modelo.setRowCount(0);
-        List<Emprestimo> emprestimos = controle.imprimirTodosInterface();
-        for (Emprestimo emprestimo : emprestimos) {
-            int idEmprestimo = emprestimo.getId();
-            String leitor = emprestimo.getLeitor().getNome();
-            int codLivro = emprestimo.getLivro().getCodigo();
-            String titulo = emprestimo.getLivro().getTitulo();
-            String autor = emprestimo.getLivro().getAutor();
-            int status = emprestimo.getLivro().getStatus();
-            Date dtEmprestimo = emprestimo.getDataEmprestimo();
-            Date prEntrega = emprestimo.getDataPrevisaoDevolucao();
-            Date dtEntrega = emprestimo.getDataDevolucao();
-            String dataFormatadaDevolucao = null;
-
-            //Formatção da data no padrão br
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            String dataFormatadaEmprestimo = dateFormat.format(dtEmprestimo);
-            String dataFormatadaPrevisao = dateFormat.format(prEntrega);
-            if (dtEntrega != null) {
-                dataFormatadaDevolucao = dateFormat.format(dtEntrega);
-            }
-
-            modelo.addRow(new Object[]{idEmprestimo, leitor, codLivro, titulo, autor,
-                status, dataFormatadaEmprestimo, dataFormatadaPrevisao, dataFormatadaDevolucao});
-        }
+        controle.imprimirTodosGUI(modelo);
     }
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         // REALIZAÇÃO DE CADASTRO
         String nomeEmp = txtLeitor.getText();
         String tituloEmp = txtTitulo.getText();
+        boolean resultado = controle.cadastrarEmprestimoGUI(this, nomeEmp, tituloEmp);
 
-        if (!nomeEmp.trim().isEmpty() || !tituloEmp.trim().isEmpty()) {
-            try {
-                int retornoCadastro = controle.criarEmprestimo(nomeEmp, tituloEmp);
-                switch (retornoCadastro) {
-                    case 1:
-                        JOptionPane.showMessageDialog(this, "Livro indisponível no momento", "Erro", JOptionPane.ERROR_MESSAGE);
-                        break;
-                    case 2:
-                        JOptionPane.showMessageDialog(this, "Leitor não cadastrado", "Erro", JOptionPane.ERROR_MESSAGE);
-                        break;
-                    case 3:
-                        JOptionPane.showMessageDialog(this, "Livro não cadastrado no sistema", "Erro", JOptionPane.ERROR_MESSAGE);
-                        break;
-                    case 4:
-                        rederizaTabela();
-                        controle.gravarTodos();
-                        break;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Erro ao realizar cadastrado", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
+        if (resultado == true) {
+            renderizaTabela();
+            limparCampos();
         }
+
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolverActionPerformed
         // CÓDIGO EXECUTADO AO CLICAR PARA DEVOLVER
-        if (JOptionPane.showConfirmDialog(this, "Confirmar entrega?") == 0) {;
-            controle.devolverLivro(tabelaEmprestimo.getSelectedRow() + 1);
-            controle.gravarTodos();
-            rederizaTabela();
+        if (tabelaEmprestimo.getSelectedRow() != -1 && JOptionPane.showConfirmDialog(this, "Confirmar entrega?") == 0) {;
+            if (controle.devolverLivro((int)tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 0)) == true) {
+                controle.gravarTodos();
+                renderizaTabela();
+            } else {
+                JOptionPane.showMessageDialog(this, "Esse livro já foi devolvido", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnDevolverActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         // CÓDIGO EXECUTADO AO CLICAR PARA EXCLUIR
-        if (JOptionPane.showConfirmDialog(this, "Excluir o Empréstimo?") == 0) {;
-            controle.excluirEmprestimo(tabelaEmprestimo.getSelectedRow() + 1);
+        if (tabelaEmprestimo.getSelectedRow() != -1 && JOptionPane.showConfirmDialog(this, "Excluir o Empréstimo?") == 0) {;
+            controle.excluirEmprestimo((int)tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 0));
             controle.gravarTodos();
-            rederizaTabela();
+            renderizaTabela();
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         // CÓDIGO EXECUTADO AO CLICAR PARA ALTERAR
-        int indice = tabelaEmprestimo.getSelectedRow();
-        tabelaEmprestimo.getValueAt(indice, WIDTH);
-        
-        
-        if (btnAlterar.getText().equals("Alterar")) {
-            btnCadastrar.setVisible(false);
-            btnDevolver.setVisible(false);
-            btnExcluir.setVisible(false);
-            btnCancelar.setVisible(true);
-            String nomeLeitro = (String) tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 1);
-            String tituloLivro = (String) tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 3);
-            txtLeitor.setText(nomeLeitro);
-            txtTitulo.setText(tituloLivro);
-            btnAlterar.setText("Confirmar");
-            
-            
-        } else {
-            btnAlterar.setText("Alterar");
-            btnCadastrar.setVisible(true);
-            btnDevolver.setVisible(true);
-            btnExcluir.setVisible(true);
-            btnCancelar.setVisible(false);
+        if (tabelaEmprestimo.getSelectedRow() != -1) {
+            int indice = tabelaEmprestimo.getSelectedRow();
+            String antNome = (String) tabelaEmprestimo.getValueAt(indice, 1);
+            String antTitulo = (String) tabelaEmprestimo.getValueAt(indice, 3);
+            String nomeEmp = txtLeitor.getText();
+            String tituloEmp = txtTitulo.getText();
+
+            txtLeitor.setText(antNome);
+            txtTitulo.setText(antTitulo);
+
+            int idEmprestimo = (Integer) tabelaEmprestimo.getValueAt(tabelaEmprestimo.getSelectedRow(), 0);
+
+            if (btnAlterar.getText().equals("Alterar")) {
+                alternarBotõesAlterar();
+                btnAlterar.setText("Confirmar");
+            } else {
+                short resultado = controle.alterarEmprestimoGUI(idEmprestimo, tituloEmp, nomeEmp);
+                switch (resultado) {
+                    case 1:
+                        JOptionPane.showMessageDialog(this, "Livro não cadastrado no sistema", "Erro", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    case 2:
+                        JOptionPane.showMessageDialog(this, "Leitor nao cadatrado, corrija e tente novamente", "Erro", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    case 3:
+                        JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    default:
+                        btnAlterar.setText("Alterar");
+                        limparCampos();
+                        alternarBotõesAlterar();
+                        renderizaTabela();
+                        controle.gravarTodos();
+                        break;
+                }
+            }
         }
     }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void alternarBotõesAlterar() {
+        btnCadastrar.setVisible(!btnCadastrar.isVisible());
+        btnDevolver.setVisible(!btnDevolver.isVisible());
+        btnExcluir.setVisible(!btnExcluir.isVisible());
+        btnCancelar.setVisible(!btnCancelar.isVisible());
+    }
+
+    private void limparCampos() {
+        txtLeitor.setText("");
+        txtTitulo.setText("");
+    }
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        btnAlterar.setText("Alterar");
+        alternarBotõesAlterar();
+        limparCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
